@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --blue: #087FC8;
-  --yellow: #FFBE00;
+  --blue: #0B5ED7;
+  --yellow: #F6B918;
   --orange: #FF5100;
   --pink: #F86D86;
   --green: #0AA13B;
-  --black: #080808;
+  --black: #0B1F3A;
   --white: #FFFFFF;
   --gray-bg: #F1F1F3;
   --pale-blue: #EAF5FF;
@@ -18,6 +18,71 @@
 
 * {
   font-family: 'Be Vietnam Pro', sans-serif;
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+.grid > *,
+.flex > * {
+  min-width: 0;
+}
+
+body {
+  margin: 0;
+  color: #0f172a;
+  background: #fff;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+main h1,
+main h2 {
+  text-wrap: pretty;
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+main h3 {
+  letter-spacing: -0.006em;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+button,
+a,
+label {
+  line-height: 1.4;
+}
+
+.page-hero-title {
+  font-size: clamp(2rem, 3vw, 2.7rem) !important;
+  line-height: 1.18 !important;
+  max-width: 18ch;
+}
+
+main p {
+  text-wrap: pretty;
+}
+
+@media (min-width: 768px) {
+  .title-single-line { max-width: none; }
+}
+
+.hero-shell {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(11, 94, 215, 0.10), transparent 32%),
+    radial-gradient(circle at 88% 8%, rgba(246, 185, 24, 0.16), transparent 28%),
+    linear-gradient(135deg, #f8fbff 0%, #ffffff 52%, #f7faff 100%);
 }
 
 html {
@@ -76,9 +141,9 @@ html {
   background-color: var(--blue);
 }
 .btn-primary:hover {
-  background-color: #0670b0;
+  background-color: #094faf;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(8,127,200,0.35);
+  box-shadow: 0 8px 24px rgba(11,94,215,0.28);
 }
 
 .btn-outline {
@@ -111,7 +176,7 @@ html {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #087FC8; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #0B5ED7; border-radius: 3px; }
 
 /* Focus styles for accessibility */
 :focus-visible {

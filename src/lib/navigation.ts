@@ -37,9 +37,9 @@ export const urlFor = (page: Page): string => {
 
 export const pageFromPath = (path: string): Page => {
   const clean = path.replace(/^\/+|\/+$/g, '');
-  const entries = Object.entries(urlFor('home') as unknown as Record<Page, string>);
-  for (const [page, url] of entries) {
-    if (url.replace(/^\/+|\/+$/g, '') === clean) return page as Page;
+  const pages: Page[] = ['home', 'services', 'schools', 'insights', 'about', 'contact', 'privacy', 'terms', 'refund', 'disclaimer'];
+  for (const page of pages) {
+    if (urlFor(page).replace(/^\/+|\/+$/g, '') === clean) return page;
   }
   return 'home';
 };

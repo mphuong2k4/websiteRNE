@@ -11,7 +11,7 @@ import PrivacyPage from '@/pages/PrivacyPage';
 import TermsPage from '@/pages/TermsPage';
 import RefundPage from '@/pages/RefundPage';
 import DisclaimerPage from '@/pages/DisclaimerPage';
-import { pageFromPath, type Page } from '@/lib/navigation';
+import { pageFromPath, urlFor, type Page } from '@/lib/navigation';
 
 function getCurrentPage(): Page {
   const hash = window.location.hash.replace(/^#/, '');
@@ -31,13 +31,22 @@ export default function App() {
   }, []);
 
   const navigate = (next: Page) => {
-    const url = `#${next === 'home' ? '/' : '/' + next}`;
+    const url = `#${urlFor(next)}`;
     if (window.location.hash !== url) {
       window.location.hash = url;
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  useEffect(() => {
+    const labels: Record<Page, string> = {
+      home: 'Trang chủ', services: 'Dịch vụ', schools: 'Trường tại Thái Lan', insights: 'Insights',
+      about: 'Về RNE', contact: 'Liên hệ', privacy: 'Chính sách bảo mật', terms: 'Điều khoản dịch vụ',
+      refund: 'Chính sách hoàn phí', disclaimer: 'Miễn trừ trách nhiệm',
+    };
+    document.title = `${labels[page]} | Right Now Education`;
+  }, [page]);
 
   const render = () => {
     switch (page) {

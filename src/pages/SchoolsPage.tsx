@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { ArrowRight, BadgeCheck, MapPin } from 'lucide-react';
+import { BadgeCheck, MapPin, ExternalLink } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
 import { SCHOOLS, SCHOOL_FILTERS, type SchoolFilter } from '@/data/schools';
 import SchoolLogo from '@/components/SchoolLogo';
 import CTASection from '@/components/CTASection';
+import { SCHOOL_WEBSITES } from '@/data/schoolWebsites';
 
 interface SchoolsPageProps {
   onNavigate: (page: Page) => void;
@@ -28,14 +29,19 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
   return (
     <>
       <section className="bg-surface-pale-blue">
-        <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
-          <p className="section-label">TRƯỜNG ĐẠI HỌC THÁI LAN</p>
-          <h1 className="mt-4 text-3xl md:text-6xl font-extrabold text-brand-black leading-tight max-w-4xl">
-            Khám phá các trường đại học và học viện nổi bật tại Thái Lan.
-          </h1>
-          <p className="mt-6 text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl">
-            RNE hỗ trợ khách hàng tìm hiểu và chuẩn bị hồ sơ vào nhiều nhóm trường khác nhau, từ đại học công lập, tư thục, chương trình quốc tế đến các học viện chuyên sâu về công nghệ, kinh doanh và hospitality.
-          </p>
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-20">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <p className="section-label">TRƯỜNG ĐẠI HỌC THÁI LAN</p>
+              <h1 className="page-hero-title mt-4 font-extrabold text-brand-black">
+                Tìm môi trường phù hợp với ngành học và ngân sách.
+              </h1>
+              <p className="mt-5 text-base md:text-lg text-gray-700 leading-relaxed">
+                Khám phá trường công, trường tư và học viện chuyên ngành nổi bật tại Thái Lan.
+              </p>
+            </div>
+            <img src="/thailand-campus-life.jpg" alt="Sinh viên trong khuôn viên đại học hiện đại tại Thái Lan" className="aspect-[16/10] w-full rounded-3xl object-cover shadow-xl" width="1536" height="1024" />
+          </div>
         </div>
       </section>
 
@@ -63,7 +69,7 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
             {filtered.map((school) => (
               <article key={school.name} className="rounded-2xl border border-gray-100 p-6 hover-lift flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-4">
-                  <SchoolLogo name={school.name} abbr={school.abbr} className="h-16 w-16" />
+                  <SchoolLogo name={school.name} abbr={school.abbr} className="h-20 w-20" />
                   {school.partner && (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-green bg-green-50 px-2.5 py-1 rounded-full">
                       <BadgeCheck className="w-3.5 h-3.5" /> Đối tác chính thức
@@ -93,6 +99,15 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
                     <p className="text-xs text-gray-500 mt-0.5">Nguồn: {school.ranking.source} • {school.ranking.year}</p>
                   </div>
                 )}
+                <a
+                  href={SCHOOL_WEBSITES[school.abbr]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto pt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue hover:underline"
+                  aria-label={`Mở website chính thức của ${school.name}`}
+                >
+                  Website chính thức <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               </article>
             ))}
           </div>

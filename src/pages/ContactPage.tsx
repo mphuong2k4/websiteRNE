@@ -1,19 +1,11 @@
 import { useState, type FormEvent } from 'react';
-import { Mail, Facebook, Instagram, MessageCircle, Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Send, CheckCircle2, AlertCircle, Loader2, Clock3 } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
 import { supabase } from '@/lib/supabase';
 
 interface ContactPageProps {
   onNavigate: (page: Page) => void;
 }
-
-const SOCIAL_LINKS = [
-  { label: 'Facebook', href: '[ADD OFFICIAL FACEBOOK URL]', icon: Facebook },
-  { label: 'Instagram', href: '[ADD OFFICIAL INSTAGRAM URL]', icon: Instagram },
-  { label: 'Threads', href: '[ADD OFFICIAL THREADS URL]', icon: MessageCircle },
-  { label: 'WhatsApp', href: '[ADD OFFICIAL WHATSAPP URL]', icon: MessageCircle },
-  { label: 'Zalo', href: '[ADD OFFICIAL ZALO URL]', icon: MessageCircle },
-];
 
 const EDUCATION_LEVELS = ['Đang học cấp 3', 'Đã tốt nghiệp cấp 3', 'Đang học đại học / cao đẳng', 'Đã tốt nghiệp đại học', 'Đã có bằng thạc sĩ trở lên'];
 const COUNTRIES = ['Thái Lan', 'Anh', 'Mỹ', 'Úc', 'New Zealand', 'Singapore', 'Chưa xác định'];
@@ -24,7 +16,8 @@ const CHANNELS = ['Email', 'Zalo', 'WhatsApp', 'Facebook', 'Điện thoại'];
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
-export default function ContactPage({ onNavigate: _onNavigate }: ContactPageProps) {
+export default function ContactPage(_props: ContactPageProps) {
+  void _props;
   const [status, setStatus] = useState<Status>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [honeypot, setHoneypot] = useState('');
@@ -47,7 +40,6 @@ export default function ContactPage({ onNavigate: _onNavigate }: ContactPageProp
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
-    setStatus('loading');
     const fd = new FormData(e.currentTarget);
     const payload = {
       full_name: fd.get('fullName'),
@@ -64,6 +56,22 @@ export default function ContactPage({ onNavigate: _onNavigate }: ContactPageProp
       contact_channel: fd.get('channel'),
     };
 
+    setStatus('loading');
+    if (!supabase) {
+      const subject = encodeURIComponent(`Yêu cầu tư vấn từ ${String(payload.full_name || '')}`);
+      const body = encodeURIComponent([
+        `Họ và tên: ${payload.full_name || ''}`, `Năm sinh: ${payload.birth_year || ''}`,
+        `Email: ${payload.email || ''}`, `Số điện thoại: ${payload.phone || ''}`,
+        `Trình độ hiện tại: ${payload.education_level || ''}`, `Quốc gia quan tâm: ${payload.country || ''}`,
+        `Dịch vụ: ${payload.service || ''}`, `Ngành/lĩnh vực: ${payload.field || ''}`,
+        `Ngân sách: ${payload.budget || ''}`, `Thời điểm bắt đầu: ${payload.start_time || ''}`,
+        `Kênh liên hệ mong muốn: ${payload.contact_channel || ''}`, '', `Nội dung: ${payload.content || ''}`,
+      ].join('\n'));
+      window.location.href = `mailto:admin@rightnow-education.info?subject=${subject}&body=${body}`;
+      setStatus('idle');
+      return;
+    }
+
     const { error } = await supabase.from('contact_submissions').insert(payload);
     if (error) {
       setStatus('error');
@@ -76,14 +84,15 @@ export default function ContactPage({ onNavigate: _onNavigate }: ContactPageProp
   return (
     <>
       <section className="bg-surface-pale-blue">
-        <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
-          <p className="section-label">LIÊN HỆ</p>
-          <h1 className="mt-4 text-3xl md:text-6xl font-extrabold text-brand-black leading-tight max-w-3xl">
-            Hãy bắt đầu từ mục tiêu của bạn.
-          </h1>
-          <p className="mt-6 text-base md:text-lg text-gray-700 leading-relaxed max-w-2xl">
-            Bạn chưa cần biết chính xác mình nên chọn trường, học bổng hay chương trình nào. Hãy chia sẻ mục tiêu và tình trạng hiện tại để RNE giúp bạn xác định bước tiếp theo.
-          </p>
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-20">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7">
+              <p className="section-label">LIÊN HỆ</p>
+              <h1 className="page-hero-title title-single-line mt-4 font-extrabold text-brand-black">Bắt đầu từ mục tiêu của bạn.</h1>
+              <p className="mt-5 text-gray-700 leading-relaxed">Chia sẻ vài thông tin cơ bản. RNE sẽ giúp bạn xác định bước tiếp theo phù hợp.</p>
+            </div>
+            <img src="/rne-service-planning.jpg" alt="Buổi trao đổi định hướng cùng chuyên viên RNE" className="lg:col-span-5 aspect-[16/9] w-full rounded-3xl object-cover shadow-xl" width="1536" height="1024" />
+          </div>
         </div>
       </section>
 
@@ -97,12 +106,9 @@ export default function ContactPage({ onNavigate: _onNavigate }: ContactPageProp
                 <a href="mailto:admin@rightnow-education.info" className="inline-flex items-center gap-2 text-brand-blue font-medium hover:underline">
                   <Mail className="w-5 h-5" /> admin@rightnow-education.info
                 </a>
-                <div className="mt-6 space-y-2.5">
-                  {SOCIAL_LINKS.map((s) => (
-                    <a key={s.label} href={s.href} className="flex items-center gap-2 text-sm text-gray-700 hover:text-brand-blue transition-colors">
-                      <s.icon className="w-4 h-4" /> {s.label}
-                    </a>
-                  ))}
+                <div className="mt-6 flex items-start gap-2 text-sm text-gray-600">
+                  <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-brand-blue" />
+                  <span>RNE sẽ phản hồi qua email sau khi tiếp nhận thông tin.</span>
                 </div>
               </div>
               <div className="rounded-2xl bg-brand-yellow/10 border border-brand-yellow/30 p-5">

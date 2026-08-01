@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
-import { NAV_ITEMS, urlFor, type Page } from '@/lib/navigation';
+import { NAV_ITEMS, type Page } from '@/lib/navigation';
+import BrandLogo from '@/components/BrandLogo';
 
 interface HeaderProps {
   current: Page;
@@ -36,14 +37,10 @@ export default function Header({ current, onNavigate }: HeaderProps) {
             className="flex items-center gap-2 shrink-0"
             aria-label="Right Now Education – Trang chủ"
           >
-            <img
-              src="/assets/brand/image.png"
-              alt="Right Now Education logo"
-              className="h-9 md:h-11 w-auto object-contain"
-            />
+            <BrandLogo className="h-10 md:h-11" />
           </button>
 
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Điều hướng chính">
+          <nav className="hidden xl:flex items-center gap-1" aria-label="Điều hướng chính">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.page}
@@ -59,7 +56,7 @@ export default function Header({ current, onNavigate }: HeaderProps) {
             ))}
           </nav>
 
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <button onClick={() => go('contact')} className="btn-primary text-sm">
               Đăng ký tư vấn
               <ArrowRight className="w-4 h-4" />
@@ -67,7 +64,7 @@ export default function Header({ current, onNavigate }: HeaderProps) {
           </div>
 
           <button
-            className="lg:hidden p-2 -mr-2 text-brand-black"
+            className="xl:hidden p-2 -mr-2 text-brand-black"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Đóng menu' : 'Mở menu'}
             aria-expanded={open}
@@ -78,7 +75,7 @@ export default function Header({ current, onNavigate }: HeaderProps) {
       </div>
 
       {open && (
-        <div className="lg:hidden border-t border-gray-100 bg-white">
+        <div className="xl:hidden border-t border-gray-100 bg-white">
           <nav className="mx-auto max-w-content px-5 py-4 flex flex-col gap-1" aria-label="Điều hướng chính (mobile)">
             {NAV_ITEMS.map((item) => (
               <button

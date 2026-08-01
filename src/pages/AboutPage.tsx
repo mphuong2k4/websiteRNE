@@ -1,4 +1,4 @@
-import { ArrowRight, Target, Wallet, GitCompareArrows, GraduationCap, Briefcase, ShieldCheck } from 'lucide-react';
+import { Target, Wallet, GitCompareArrows, GraduationCap, Briefcase, ShieldCheck } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
 import CTASection from '@/components/CTASection';
 
@@ -15,21 +15,21 @@ const APPROACH = [
   { icon: ShieldCheck, text: 'Minh bạch về điều kiện, chi phí và khả năng cạnh tranh' },
 ];
 
-const TEAM_PLACEHOLDERS = [
-  { name: '[Tên thành viên]', role: 'Founder', exp: '[Kinh nghiệm]', area: '[Lĩnh vực phụ trách]', linkedin: '[LinkedIn URL]' },
-  { name: '[Tên thành viên]', role: 'Cố vấn giáo dục', exp: '[Kinh nghiệm]', area: '[Lĩnh vực phụ trách]', linkedin: '[LinkedIn URL]' },
-  { name: '[Tên thành viên]', role: 'Cố vấn nghề nghiệp', exp: '[Kinh nghiệm]', area: '[Lĩnh vực phụ trách]', linkedin: '[LinkedIn URL]' },
-];
-
 export default function AboutPage({ onNavigate }: AboutPageProps) {
   return (
     <>
       <section className="bg-surface-pale-pink">
-        <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
-          <p className="section-label">VỀ RIGHT NOW EDUCATION</p>
-          <h1 className="mt-4 text-3xl md:text-6xl font-extrabold text-brand-black leading-tight max-w-4xl">
-            Right Now Education được xây dựng cho những lựa chọn giáo dục có mục tiêu.
-          </h1>
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-20">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <p className="section-label">VỀ RIGHT NOW EDUCATION</p>
+              <h1 className="page-hero-title mt-4 font-extrabold text-brand-black">
+                Tư vấn rõ ràng cho một quyết định quan trọng.
+              </h1>
+              <p className="mt-5 text-gray-700 leading-relaxed">RNE giúp người học nhìn thấy cả cơ hội, chi phí và bước đi tiếp theo trước khi lựa chọn.</p>
+            </div>
+            <img src="/thailand-campus-life.jpg" alt="Sinh viên quốc tế trong khuôn viên đại học tại Thái Lan" className="aspect-[16/10] w-full rounded-3xl object-cover shadow-xl" width="1536" height="1024" />
+          </div>
         </div>
       </section>
 
@@ -82,28 +82,6 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
                     <a.icon className="w-5 h-5 text-brand-blue" />
                   </div>
                   <p className="font-semibold text-brand-black leading-snug">{a.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Team */}
-          <div>
-            <div className="flex items-end justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-extrabold text-brand-black leading-tight">Đội ngũ RNE</h2>
-              <p className="text-xs text-gray-500">Thông tin sẽ được cập nhật khi có xác nhận.</p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {TEAM_PLACEHOLDERS.map((m, i) => (
-                <div key={i} className="rounded-2xl border border-gray-100 p-6 hover-lift">
-                  <div className="aspect-square rounded-xl bg-surface-gray mb-4 flex items-center justify-center text-gray-400 text-sm">
-                    Ảnh thành viên
-                  </div>
-                  <h3 className="font-bold text-brand-black">{m.name}</h3>
-                  <p className="text-sm text-brand-blue font-medium">{m.role}</p>
-                  <p className="mt-3 text-xs text-gray-500">Kinh nghiệm: {m.exp}</p>
-                  <p className="text-xs text-gray-500">Phụ trách: {m.area}</p>
-                  <a href={m.linkedin} className="mt-3 inline-block text-xs text-brand-blue hover:underline">{m.linkedin}</a>
                 </div>
               ))}
             </div>

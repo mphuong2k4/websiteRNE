@@ -1,4 +1,4 @@
-import { ArrowRight, Globe2, Plane, MapPin, Compass, Sparkles, Check, ShieldCheck, BookOpen } from 'lucide-react';
+import { ArrowRight, Compass, Sparkles, Check, ShieldCheck, BadgeCheck, CalendarCheck } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
 import { SERVICES } from '@/data/services';
 import { SCHOOLS } from '@/data/schools';
@@ -6,6 +6,7 @@ import { ARTICLES } from '@/data/articles';
 import ServiceIcon from '@/components/ServiceIcon';
 import SchoolLogo from '@/components/SchoolLogo';
 import CTASection from '@/components/CTASection';
+import { SCHOOL_WEBSITES } from '@/data/schoolWebsites';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
@@ -44,6 +45,13 @@ const COMMITMENTS = [
   'Cập nhật nguồn và thời điểm kiểm chứng của thông tin quan trọng',
 ];
 
+const MODERN_PRIORITIES = [
+  { title: 'ROI & khả năng chi trả', body: 'So sánh tổng chi phí, học bổng và giá trị dài hạn thay vì chỉ nhìn học phí.' },
+  { title: 'Năng lực nghề nghiệp', body: 'Gắn lựa chọn ngành học với kỹ năng, internship và bối cảnh tuyển dụng thực tế.' },
+  { title: 'AI & hồ sơ số', body: 'Dùng công nghệ có trách nhiệm để nghiên cứu, lập kế hoạch và hoàn thiện hồ sơ — không thay thế tiếng nói cá nhân.' },
+  { title: 'An toàn & thích nghi', body: 'Chuẩn bị về văn hóa, nhà ở, sức khỏe, dữ liệu cá nhân và cuộc sống sau nhập học.' },
+];
+
 const COLOR_MAP: Record<string, { bg: string; text: string; border: string }> = {
   blue: { bg: 'bg-surface-pale-blue', text: 'text-brand-blue', border: 'border-brand-blue' },
   yellow: { bg: 'bg-surface-pale-yellow', text: 'text-brand-orange', border: 'border-brand-yellow' },
@@ -56,77 +64,51 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <>
       {/* SECTION 1 — HERO */}
-      <section className="relative overflow-hidden bg-white">
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-surface-pale-blue -skew-x-6 origin-top-right hidden md:block" aria-hidden />
-        <div className="relative mx-auto max-w-content px-5 sm:px-8 py-14 md:py-24">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            <div className="lg:col-span-7">
-              <p className="section-label">RIGHT NOW EDUCATION • THAILAND SPECIALIST</p>
-              <h1 className="mt-4 text-4xl md:text-6xl font-extrabold text-brand-black leading-[1.1]">
-                Du học không chỉ để lấy bằng.
+      <section className="hero-shell relative overflow-hidden">
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-20 lg:py-24">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="lg:col-span-6 relative z-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-white/80 px-3.5 py-2 text-xs font-semibold text-brand-blue shadow-sm backdrop-blur">
+                <BadgeCheck className="h-4 w-4" /> Tư vấn giáo dục chuyên sâu về Thái Lan
+              </div>
+              <h1 className="mt-6 text-[2.35rem] sm:text-5xl font-extrabold text-slate-950">
+                Biến kế hoạch du học thành một <span className="text-brand-blue">lộ trình rõ ràng.</span>
               </h1>
-              <p className="mt-3 text-2xl md:text-4xl font-bold text-brand-blue leading-tight">
-                Hãy xây dựng một lộ trình đáng với khoản đầu tư của bạn.
+              <p className="mt-6 text-base md:text-lg text-slate-600 leading-relaxed max-w-xl">
+                Từ chọn ngành, chọn trường đến học bổng và hồ sơ — RNE đồng hành bằng tư vấn cá nhân hóa, thông tin minh bạch và quyết định dựa trên mục tiêu thật của bạn.
               </p>
-              <p className="mt-6 text-base md:text-lg text-gray-700 leading-relaxed max-w-2xl">
-                Right Now Education là đơn vị tư vấn giáo dục chuyên sâu về Thái Lan, đồng hành cùng người học trong quá trình chọn trường, chuẩn bị hồ sơ, tìm kiếm học bổng và xây dựng trải nghiệm nghề nghiệp trước khi tốt nghiệp.
-              </p>
-              <p className="mt-4 text-sm md:text-base text-gray-600 leading-relaxed max-w-2xl">
-                Ngoài Thái Lan, RNE có thể hỗ trợ nhu cầu học tập, internship, tình nguyện và xây dựng hồ sơ tại Anh, Mỹ, Úc, New Zealand và Singapore.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button onClick={() => onNavigate('contact')} className="btn-primary">
-                  Đăng ký tư vấn <ArrowRight className="w-4 h-4" />
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onClick={() => onNavigate('contact')} className="btn-primary justify-center">
+                  Đặt lịch tư vấn <ArrowRight className="w-4 h-4" />
                 </button>
-                <button onClick={() => onNavigate('services')} className="btn-outline">
-                  Khám phá dịch vụ
+                <button onClick={() => onNavigate('services')} className="btn-outline justify-center">
+                  Xem lộ trình dịch vụ
                 </button>
+              </div>
+              <div className="mt-8 grid sm:grid-cols-2 gap-3 text-sm text-slate-600">
+                <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-brand-green" /> Đánh giá hồ sơ theo mục tiêu</span>
+                <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-brand-green" /> Minh bạch chi phí & điều kiện</span>
               </div>
             </div>
 
-            {/* Hero visual */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative aspect-square max-w-md mx-auto">
-                {/* Geometric shapes */}
-                <div className="absolute top-4 left-4 w-24 h-24 rounded-3xl bg-brand-yellow animate-float-slow" aria-hidden />
-                <div className="absolute bottom-8 right-2 w-20 h-20 rounded-full bg-brand-pink animate-float" aria-hidden />
-                <div className="absolute top-1/2 -right-2 w-16 h-16 bg-brand-green rounded-2xl rotate-12 animate-float-slow" aria-hidden />
-
-                {/* Student cutout */}
-                <div className="absolute inset-6 rounded-3xl overflow-hidden bg-surface-pale-blue border-4 border-white shadow-xl">
-                  <img
-                    src="https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg?auto=compress&cs=tinysrgb&w=900"
-                    alt="Sinh viên Việt Nam đang chuẩn bị hành trình du học Thái Lan"
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                  />
-                </div>
-
-                {/* SVG flight path */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400" aria-hidden>
-                  <path
-                    d="M 60 340 Q 200 60 360 200"
-                    fill="none"
-                    stroke="#087FC8"
-                    strokeWidth="3"
-                    className="animate-flight-path"
-                  />
-                </svg>
-
-                {/* Plane icon */}
-                <div className="absolute top-6 right-10 w-12 h-12 rounded-full bg-brand-blue text-white flex items-center justify-center shadow-lg animate-float">
-                  <Plane className="w-6 h-6 -rotate-45" />
-                </div>
-
-                {/* Globe badge */}
-                <div className="absolute -bottom-2 left-2 w-14 h-14 rounded-full bg-white border-2 border-brand-blue flex items-center justify-center shadow-md">
-                  <Globe2 className="w-7 h-7 text-brand-blue" />
-                </div>
-                {/* Pin */}
-                <div className="absolute top-1/3 -left-3 w-12 h-12 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-md animate-float-slow">
-                  <MapPin className="w-6 h-6" />
+            <div className="lg:col-span-6 relative">
+              <div className="relative overflow-hidden rounded-[2rem] bg-slate-100 shadow-[0_30px_80px_rgba(11,31,58,0.18)] ring-1 ring-slate-900/5">
+                <img
+                  src="/rne-consultation-hero.jpg"
+                  alt="Chuyên viên Right Now Education trao đổi lộ trình du học cùng sinh viên Việt Nam"
+                  className="aspect-[4/3] w-full object-cover object-center"
+                  width="1536"
+                  height="1024"
+                  fetchPriority="high"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/55 to-transparent" aria-hidden />
+                <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 rounded-2xl border border-white/20 bg-white/95 p-4 shadow-lg backdrop-blur">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-blue text-white"><CalendarCheck className="h-5 w-5" /></span>
+                  <span><strong className="block text-sm text-slate-950">Bắt đầu bằng buổi tư vấn định hướng</strong><span className="text-xs text-slate-500">Hiểu mục tiêu trước khi đề xuất giải pháp</span></span>
                 </div>
               </div>
+              <div className="absolute -right-6 -top-6 -z-10 h-40 w-40 rounded-full bg-brand-yellow/30 blur-2xl" aria-hidden />
+              <div className="absolute -bottom-8 -left-8 -z-10 h-48 w-48 rounded-full bg-brand-blue/20 blur-3xl" aria-hidden />
             </div>
           </div>
         </div>
@@ -138,7 +120,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="grid lg:grid-cols-12 gap-10">
             <div className="lg:col-span-7">
               <p className="section-label">RNE LÀ GÌ?</p>
-              <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+              <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
                 Một lộ trình học tập tốt cần dẫn đến một tương lai nghề nghiệp rõ ràng hơn.
               </h2>
             </div>
@@ -170,7 +152,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="max-w-2xl">
             <p className="section-label">RNE DÀNH CHO AI</p>
-            <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
               RNE có thể đồng hành cùng bạn ở đâu?
             </h2>
           </div>
@@ -190,12 +172,32 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
+      <section className="bg-brand-black text-white">
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-14 md:py-20">
+          <div className="grid lg:grid-cols-12 gap-8 items-end">
+            <div className="lg:col-span-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-brand-yellow">ƯU TIÊN CỦA NGƯỜI HỌC HIỆN ĐẠI</p>
+              <h2 className="mt-4 text-3xl font-extrabold leading-tight">Không chỉ “đi được”, mà phải đi đúng.</h2>
+            </div>
+            <div className="lg:col-span-8 grid sm:grid-cols-2 gap-4">
+              {MODERN_PRIORITIES.map((item, index) => (
+                <div key={item.title} className="rounded-2xl border border-white/10 bg-white/[0.06] p-5">
+                  <span className="text-xs font-bold text-brand-yellow">0{index + 1}</span>
+                  <h3 className="mt-2 font-bold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 4 — FIVE SERVICES */}
       <section className="bg-surface-gray">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="max-w-2xl">
             <p className="section-label">DỊCH VỤ CỦA RNE</p>
-            <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
               Không chỉ nộp hồ sơ. RNE giúp bạn xây dựng cả một lộ trình.
             </h2>
           </div>
@@ -230,17 +232,17 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="max-w-2xl">
             <p className="section-label">TRƯỜNG ĐẠI HỌC THÁI LAN</p>
-            <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
               Những ngôi trường có thể trở thành bước tiếp theo của bạn.
             </h2>
           </div>
           <div className="mt-12 overflow-hidden">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
               {SCHOOLS.slice(0, 10).map((school) => (
-                <div key={school.name} className="flex flex-col items-center gap-3 p-4 rounded-2xl border border-gray-100 hover-lift">
+                <a key={school.name} href={SCHOOL_WEBSITES[school.abbr]} target="_blank" rel="noopener noreferrer" aria-label={`Mở website chính thức của ${school.name}`} className="flex flex-col items-center gap-3 p-4 rounded-2xl border border-gray-100 hover-lift">
                   <SchoolLogo name={school.name} abbr={school.abbr} className="h-16 w-16" />
                   <p className="text-xs font-medium text-center text-gray-700 leading-tight line-clamp-2">{school.name}</p>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -257,7 +259,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="max-w-2xl">
             <p className="section-label">QUY TRÌNH LÀM VIỆC</p>
-            <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
               Bắt đầu từ mục tiêu. Kết thúc bằng một lộ trình rõ ràng.
             </h2>
           </div>
@@ -280,7 +282,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="max-w-2xl">
             <p className="section-label">CAM KẾT CỦA RNE</p>
-            <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
               Minh bạch từ lựa chọn đầu tiên đến kết quả cuối cùng.
             </h2>
           </div>
@@ -315,7 +317,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div className="max-w-2xl">
               <p className="section-label">INSIGHTS</p>
-              <h2 className="mt-4 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight">
+              <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
                 Hiểu kỹ trước khi lựa chọn.
               </h2>
             </div>

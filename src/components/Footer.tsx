@@ -1,17 +1,10 @@
-import { Mail, Facebook, Instagram, MessageCircle, ArrowRight } from 'lucide-react';
-import { NAV_ITEMS, urlFor, type Page } from '@/lib/navigation';
+import { Mail, ArrowRight } from 'lucide-react';
+import { NAV_ITEMS, type Page } from '@/lib/navigation';
+import BrandLogo from '@/components/BrandLogo';
 
 interface FooterProps {
   onNavigate: (page: Page) => void;
 }
-
-const SOCIAL_LINKS: { label: string; href: string; icon: typeof Mail }[] = [
-  { label: 'Facebook', href: '[ADD OFFICIAL FACEBOOK URL]', icon: Facebook },
-  { label: 'Instagram', href: '[ADD OFFICIAL INSTAGRAM URL]', icon: Instagram },
-  { label: 'Threads', href: '[ADD OFFICIAL THREADS URL]', icon: MessageCircle },
-  { label: 'WhatsApp', href: '[ADD OFFICIAL WHATSAPP URL]', icon: MessageCircle },
-  { label: 'Zalo', href: '[ADD OFFICIAL ZALO URL]', icon: MessageCircle },
-];
 
 const LEGAL: { label: string; page: Page }[] = [
   { label: 'Chính sách bảo mật', page: 'privacy' },
@@ -26,7 +19,7 @@ export default function Footer({ onNavigate }: FooterProps) {
       <div className="mx-auto max-w-content px-5 sm:px-8 py-14 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <img src="/assets/brand/image.png" alt="Right Now Education" className="h-12 w-auto bg-white rounded-xl p-2 mb-5" />
+            <BrandLogo inverse className="h-12 mb-5" />
             <p className="text-gray-300 text-sm leading-relaxed max-w-md">
               Right Now Education là đơn vị tư vấn giáo dục chuyên sâu về Thái Lan, kết nối lựa chọn học tập với học bổng và trải nghiệm nghề nghiệp.
             </p>
@@ -52,16 +45,10 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           <div className="md:col-span-4">
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Kênh liên hệ</h3>
-            <ul className="space-y-2.5 mb-6">
-              {SOCIAL_LINKS.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} className="inline-flex items-center gap-2 text-sm text-gray-200 hover:text-brand-yellow transition-colors">
-                    <s.icon className="w-4 h-4" /> {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Liên hệ tư vấn</h3>
+            <a href="mailto:admin@rightnow-education.info" className="inline-flex items-center gap-2 text-sm text-gray-200 hover:text-brand-yellow transition-colors mb-7">
+              <Mail className="w-4 h-4" /> Gửi email cho RNE
+            </a>
             <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Pháp lý</h3>
             <ul className="space-y-2.5">
               {LEGAL.map((l) => (

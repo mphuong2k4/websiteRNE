@@ -80,14 +80,10 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
   return (
     <>
       <section className="bg-surface-pale-yellow">
-        <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-20">
           <p className="section-label">INSIGHTS</p>
-          <h1 className="mt-4 text-3xl md:text-6xl font-extrabold text-brand-black leading-tight max-w-3xl">
-            Hiểu kỹ trước khi lựa chọn.
-          </h1>
-          <p className="mt-6 text-base md:text-lg text-gray-700 leading-relaxed max-w-2xl">
-            Phân tích về trường, ngành, học bổng, internship và cuộc sống tại Thái Lan — được biên tập bởi đội ngũ RNE dựa trên nguồn kiểm chứng.
-          </p>
+          <h1 className="page-hero-title title-single-line mt-4 font-extrabold text-brand-black">Hiểu kỹ. Chọn đúng.</h1>
+          <p className="mt-5 text-gray-700 leading-relaxed max-w-2xl">Góc nhìn ngắn gọn về trường, ngành, học bổng và cuộc sống tại Thái Lan.</p>
         </div>
       </section>
 

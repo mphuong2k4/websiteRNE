@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-export const ICONS: Record<string, LucideIcon> = {
+const ICONS: Record<string, LucideIcon> = {
   school: GraduationCap,
   award: Award,
   briefcase: Briefcase,

@@ -5,12 +5,12 @@ export default {
     extend: {
       colors: {
         brand: {
-          blue: '#087FC8',
-          yellow: '#FFBE00',
+          blue: '#0B5ED7',
+          yellow: '#F6B918',
           orange: '#FF5100',
           pink: '#F86D86',
           green: '#0AA13B',
-          black: '#080808',
+          black: '#0B1F3A',
         },
         surface: {
           gray: '#F1F1F3',
