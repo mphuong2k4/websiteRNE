@@ -19,10 +19,14 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
     return (
       <article className="bg-white">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-16">
-          <button onClick={() => setSelected(null)} className="text-sm text-brand-blue hover:underline mb-6 inline-flex items-center gap-1">
-            ← Quay lại Insights
-          </button>
-          <span className="text-xs font-semibold text-brand-blue uppercase tracking-wide">{selected.category}</span>
+          <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <button onClick={() => setSelected(null)} className="inline-flex items-center gap-1 self-start text-sm text-brand-blue hover:underline">
+              ← Quay lại Insights
+            </button>
+            <span className="self-start rounded-full bg-surface-pale-blue px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand-blue sm:self-auto">
+              {selected.category}
+            </span>
+          </div>
           <h1 className="mt-3 text-3xl md:text-5xl font-extrabold text-brand-black leading-tight max-w-3xl">{selected.title}</h1>
           <div className="mt-6 flex flex-wrap gap-5 text-xs text-gray-500">
             <span className="inline-flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {selected.author}</span>
