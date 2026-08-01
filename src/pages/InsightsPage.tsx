@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Clock, Calendar, User } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
 import { ARTICLES, CATEGORIES, type Category, type Article } from '@/data/articles';
@@ -14,6 +14,35 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
 
   const filtered = ARTICLES.filter((a) => category === 'Tất cả' || a.category === category);
   const related = selected ? ARTICLES.filter((a) => a.slug !== selected.slug).slice(0, 3) : [];
+
+  useEffect(() => {
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const oldTitle = document.title;
+    const oldDescription = meta?.content;
+    document.title = selected?.seoTitle ?? 'Insights du học Thái Lan | Right Now Education';
+    if (meta) meta.content = selected?.metaDescription ?? 'Kiến thức thực tế về trường, học bổng, internship và cuộc sống tại Thái Lan.';
+
+    document.getElementById('rne-article-schema')?.remove();
+    if (selected) {
+      const schema = document.createElement('script');
+      schema.id = 'rne-article-schema';
+      schema.type = 'application/ld+json';
+      schema.text = JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'Article', headline: selected.title,
+        description: selected.metaDescription, image: [selected.image],
+        datePublished: selected.publishedAt, dateModified: selected.updatedAt,
+        author: { '@type': 'Organization', name: 'Right Now Education' },
+        publisher: { '@type': 'Organization', name: 'Right Now Education' },
+        keywords: selected.keywords.join(', '),
+      });
+      document.head.appendChild(schema);
+    }
+    return () => {
+      document.title = oldTitle;
+      if (meta && oldDescription) meta.content = oldDescription;
+      document.getElementById('rne-article-schema')?.remove();
+    };
+  }, [selected]);
 
   if (selected) {
     return (
@@ -35,18 +64,54 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
             <span className="inline-flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {selected.readingTime}</span>
           </div>
           <div className="mt-8 aspect-[16/8] rounded-3xl overflow-hidden">
-            <img src={selected.image} alt={selected.title} className="w-full h-full object-cover" />
+            <img src={selected.image} alt={selected.imageAlt} className="w-full h-full object-cover" />
           </div>
           <div className="mt-10 max-w-3xl">
-            <p className="text-lg text-gray-700 leading-relaxed">{selected.excerpt}</p>
-            <div className="mt-6 prose prose-gray max-w-none">
-              <p className="text-gray-700 leading-relaxed">{selected.body}</p>
+            <p className="text-xl font-medium text-brand-black leading-relaxed">{selected.excerpt}</p>
+            <p className="mt-5 text-gray-700 leading-8">{selected.introduction}</p>
+            <div className="mt-9 space-y-10">
+              {selected.sections.map((section) => (
+                <section key={section.heading}>
+                  <h2 className="text-2xl md:text-3xl font-bold text-brand-black leading-tight">{section.heading}</h2>
+                  <div className="mt-4 space-y-4">
+                    {section.paragraphs.map((paragraph) => <p key={paragraph} className="text-gray-700 leading-8">{paragraph}</p>)}
+                  </div>
+                  {section.bullets && (
+                    <ul className="mt-4 space-y-2 rounded-2xl bg-surface-pale-blue p-5 md:p-6">
+                      {section.bullets.map((item) => (
+                        <li key={item} className="flex gap-3 text-gray-700 leading-7">
+                          <span aria-hidden="true" className="mt-2 h-2 w-2 shrink-0 rounded-full bg-brand-blue" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              ))}
+            </div>
+
+            <section className="mt-12" aria-labelledby="article-faq-title">
+              <h2 id="article-faq-title" className="text-2xl md:text-3xl font-bold text-brand-black">Câu hỏi thường gặp</h2>
+              <div className="mt-5 space-y-3">
+                {selected.faq.map((item) => (
+                  <details key={item.question} className="rounded-2xl border border-gray-200 bg-white p-5 open:bg-surface-pale-yellow">
+                    <summary className="cursor-pointer list-none pr-6 font-semibold text-brand-black">{item.question}</summary>
+                    <p className="mt-3 text-gray-700 leading-7">{item.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+
+            <div className="mt-8 flex flex-wrap gap-2" aria-label="Từ khóa bài viết">
+              {selected.keywords.map((keyword) => <span key={keyword} className="rounded-full bg-surface-gray px-3 py-1.5 text-xs text-gray-600">#{keyword}</span>)}
             </div>
             <div className="mt-8 rounded-2xl bg-surface-gray p-5">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Nguồn tham khảo</p>
               <ul className="space-y-1.5">
-                {selected.sources.map((s, i) => (
-                  <li key={i} className="text-sm text-gray-700">• {s}</li>
+                {selected.sources.map((source) => (
+                  <li key={source.url}>
+                    <a href={source.url} target="_blank" rel="noreferrer" className="text-sm text-brand-blue hover:underline">{source.label} ↗</a>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -58,7 +123,7 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
               {related.map((a) => (
                 <button key={a.slug} onClick={() => { setSelected(a); window.scrollTo(0, 0); }} className="text-left bg-white rounded-2xl overflow-hidden border border-gray-100 hover-lift">
                   <div className="aspect-[16/10] overflow-hidden">
-                    <img src={a.image} alt={a.title} loading="lazy" className="w-full h-full object-cover" />
+                    <img src={a.image} alt={a.imageAlt} loading="lazy" className="w-full h-full object-cover" />
                   </div>
                   <div className="p-4">
                     <span className="text-xs font-semibold text-brand-blue uppercase">{a.category}</span>
@@ -114,7 +179,7 @@ export default function InsightsPage({ onNavigate }: InsightsPageProps) {
               <article key={a.slug} className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover-lift flex flex-col">
                 <button onClick={() => { setSelected(a); window.scrollTo(0, 0); }} className="text-left flex flex-col flex-1">
                   <div className="aspect-[16/10] overflow-hidden">
-                    <img src={a.image} alt={a.title} loading="lazy" className="w-full h-full object-cover" />
+                    <img src={a.image} alt={a.imageAlt} loading="lazy" className="w-full h-full object-cover" />
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <span className="text-xs font-semibold text-brand-blue uppercase tracking-wide">{a.category}</span>
