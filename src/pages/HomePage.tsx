@@ -72,7 +72,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <BadgeCheck className="h-4 w-4" /> Tư vấn giáo dục chuyên sâu về Thái Lan
               </div>
               <h1 className="mt-6 text-[2.35rem] sm:text-5xl font-extrabold text-slate-950">
-                Biến kế hoạch du học thành một <span className="text-brand-blue">lộ trình rõ ràng.</span>
+                Biến kế hoạch du học thành một <span className="inline-block whitespace-nowrap text-brand-blue">lộ trình rõ ràng.</span>
               </h1>
               <p className="mt-6 text-base md:text-lg text-slate-600 leading-relaxed max-w-xl">
                 Từ chọn ngành, chọn trường đến học bổng và hồ sơ — RNE đồng hành bằng tư vấn cá nhân hóa, thông tin minh bạch và quyết định dựa trên mục tiêu thật của bạn.
@@ -150,9 +150,9 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       {/* SECTION 3 — WHO IS RNE FOR */}
       <section className="bg-white">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
-          <div className="max-w-2xl">
+          <div>
             <p className="section-label">RNE DÀNH CHO AI</p>
-            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight md:whitespace-nowrap">
               RNE có thể đồng hành cùng bạn ở đâu?
             </h2>
           </div>
@@ -177,7 +177,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="grid lg:grid-cols-12 gap-8 items-end">
             <div className="lg:col-span-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-brand-yellow">ƯU TIÊN CỦA NGƯỜI HỌC HIỆN ĐẠI</p>
-              <h2 className="mt-4 text-3xl font-extrabold leading-tight">Không chỉ “đi được”, mà phải đi đúng.</h2>
+              <h2 className="mt-4 text-3xl font-extrabold leading-tight">Không chỉ “đi được” mà phải đi đúng.</h2>
             </div>
             <div className="lg:col-span-8 grid sm:grid-cols-2 gap-4">
               {MODERN_PRIORITIES.map((item, index) => (
