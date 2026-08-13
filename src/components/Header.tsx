@@ -38,7 +38,7 @@ export default function Header({ current, onNavigate }: HeaderProps) {
             className="flex items-center gap-2 shrink-0"
             aria-label="Right Now Education – Trang chủ"
           >
-            <BrandLogo className="h-10 md:h-11" />
+            <BrandLogo className="h-12 md:h-14" />
           </button>
 
           <nav className="hidden xl:flex items-center gap-1" aria-label="Điều hướng chính">
