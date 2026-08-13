@@ -12,7 +12,7 @@ export default function SchoolLogo({ name, abbr, className = 'h-16 w-16' }: Scho
   const website = SCHOOL_WEBSITES[abbr];
   const logoUrl = abbr === 'CMU'
     ? 'https://www.cmu.ac.th/favicon.ico'
-    : website && `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(website)}&sz=128`;
+    : website && `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(website)}&sz=256`;
 
   return (
     <div
@@ -23,12 +23,15 @@ export default function SchoolLogo({ name, abbr, className = 'h-16 w-16' }: Scho
         <img
           src={logoUrl}
           alt={`Biểu trưng ${name}`}
-          className="h-[72%] w-[72%] object-contain"
+          className="h-[78%] w-[78%] object-contain"
           loading="lazy"
+          onLoad={(event) => {
+            if (event.currentTarget.naturalWidth < 96 || event.currentTarget.naturalHeight < 96) setFailed(true);
+          }}
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="logo-placeholder px-2 leading-tight">{abbr}</span>
+        <span className="logo-placeholder px-2 text-sm font-extrabold tracking-tight leading-tight text-brand-blue">{abbr}</span>
       )}
     </div>
   );
