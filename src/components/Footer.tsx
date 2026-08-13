@@ -21,7 +21,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <button onClick={() => onNavigate('home')} className="mb-5 block" aria-label="Right Now Education - Trang chủ">
-              <BrandLogo inverse className="h-7" />
+              <BrandLogo inverse className="h-9" />
             </button>
             <p className="text-gray-300 text-sm leading-relaxed max-w-md">
               Right Now Education là đơn vị tư vấn giáo dục chuyên sâu về Thái Lan, kết nối lựa chọn học tập với học bổng và trải nghiệm nghề nghiệp.
