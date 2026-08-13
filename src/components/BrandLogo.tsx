@@ -6,8 +6,8 @@ interface BrandLogoProps {
 
 export default function BrandLogo({ inverse = false, compact = false, className = '' }: BrandLogoProps) {
   const mark = (
-    <span className="relative h-full aspect-square shrink-0 overflow-hidden rounded-lg" aria-hidden="true">
-      <img src="/rne-brand-logo.png" alt="" className="absolute left-1/2 top-0 h-[165%] w-auto max-w-none -translate-x-1/2 -translate-y-[14%]" />
+    <span className="h-full aspect-square shrink-0" aria-hidden="true">
+      <img src="/rne-brand-logo.png" alt="" className="h-full w-full object-contain" />
     </span>
   );
 
