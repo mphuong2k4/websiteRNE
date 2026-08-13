@@ -20,7 +20,7 @@ export default function BrandLogo({ inverse = false, compact = false, className 
 
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`} aria-label="Right Now Education">
-      {compact ? mark : inverse ? <>{wordmark}{mark}</> : <>{mark}{wordmark}</>}
+      {compact ? mark : <>{mark}{wordmark}</>}
     </span>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GraduationCap } from 'lucide-react';
 import { SCHOOL_WEBSITES } from '@/data/schoolWebsites';
 
 interface SchoolLogoProps {
@@ -25,13 +26,10 @@ export default function SchoolLogo({ name, abbr, className = 'h-16 w-16' }: Scho
           alt={`Biểu trưng ${name}`}
           className="h-[78%] w-[78%] object-contain"
           loading="lazy"
-          onLoad={(event) => {
-            if (event.currentTarget.naturalWidth < 96 || event.currentTarget.naturalHeight < 96) setFailed(true);
-          }}
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="logo-placeholder px-2 text-sm font-extrabold tracking-tight leading-tight text-brand-blue">{abbr}</span>
+        <GraduationCap className="h-8 w-8 text-brand-blue" aria-label={`Biểu tượng ${name}`} />
       )}
     </div>
   );
