@@ -20,7 +20,7 @@ export default function Footer({ onNavigate }: FooterProps) {
       <div className="mx-auto max-w-content px-5 sm:px-8 py-14 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <BrandLogo inverse className="h-14 mb-5" />
+            <BrandLogo inverse className="h-11 mb-5" />
             <p className="text-gray-300 text-sm leading-relaxed max-w-md">
               Right Now Education là đơn vị tư vấn giáo dục chuyên sâu về Thái Lan, kết nối lựa chọn học tập với học bổng và trải nghiệm nghề nghiệp.
             </p>
