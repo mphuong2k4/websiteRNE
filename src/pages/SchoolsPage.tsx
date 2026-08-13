@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { BadgeCheck, MapPin, ExternalLink } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
-import { SCHOOLS, SCHOOL_FILTERS, type SchoolFilter } from '@/data/schools';
+import { DISPLAY_SCHOOLS, DISPLAY_SCHOOL_FILTERS, type DisplaySchoolFilter } from '@/data/schools';
 import SchoolLogo from '@/components/SchoolLogo';
 import CTASection from '@/components/CTASection';
-import { SCHOOL_WEBSITES } from '@/data/schoolWebsites';
 
 interface SchoolsPageProps {
   onNavigate: (page: Page) => void;
@@ -18,11 +17,10 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
-  const [filter, setFilter] = useState<SchoolFilter>('Tất cả');
+  const [filter, setFilter] = useState<DisplaySchoolFilter>('Tất cả');
 
-  const filtered = SCHOOLS.filter((s) => {
+  const filtered = DISPLAY_SCHOOLS.filter((s) => {
     if (filter === 'Tất cả') return true;
-    if (filter === 'Bangkok' || filter === 'Ngoài Bangkok') return s.city === filter;
     return s.type === filter;
   });
 
@@ -48,7 +46,7 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
       <section className="bg-white">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-12 md:py-16">
           <div className="flex flex-wrap gap-2 mb-10" role="tablist">
-            {SCHOOL_FILTERS.map((f) => (
+            {DISPLAY_SCHOOL_FILTERS.map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
@@ -80,9 +78,6 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
                 <p className="text-xs text-gray-500 mt-1">{school.abbr}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${TYPE_COLORS[school.type]}`}>{school.type}</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-surface-gray text-gray-700">
-                    <MapPin className="w-3 h-3" /> {school.city}
-                  </span>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-100">
                   <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Thế mạnh</p>
@@ -99,15 +94,6 @@ export default function SchoolsPage({ onNavigate }: SchoolsPageProps) {
                     <p className="text-xs text-gray-500 mt-0.5">Nguồn: {school.ranking.source} • {school.ranking.year}</p>
                   </div>
                 )}
-                <a
-                  href={SCHOOL_WEBSITES[school.abbr]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-auto pt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue hover:underline"
-                  aria-label={`Mở website chính thức của ${school.name}`}
-                >
-                  Website chính thức <ExternalLink className="h-3.5 w-3.5" />
-                </a>
               </article>
             ))}
           </div>

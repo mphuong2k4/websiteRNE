@@ -1,6 +1,7 @@
-import { Mail, ArrowRight } from 'lucide-react';
+import { Mail, ArrowRight, Facebook, Instagram, Users } from 'lucide-react';
 import { NAV_ITEMS, type Page } from '@/lib/navigation';
 import BrandLogo from '@/components/BrandLogo';
+import { SOCIAL_LINKS } from '@/data/socialLinks';
 
 interface FooterProps {
   onNavigate: (page: Page) => void;
@@ -26,6 +27,12 @@ export default function Footer({ onNavigate }: FooterProps) {
             <a href="mailto:admin@rightnow-education.info" className="inline-flex items-center gap-2 mt-5 text-sm text-brand-yellow hover:underline">
               <Mail className="w-4 h-4" /> admin@rightnow-education.info
             </a>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noreferrer" aria-label="Facebook Right Now Education" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-brand-blue"><Facebook className="h-4 w-4" /></a>
+              <a href={SOCIAL_LINKS.facebookGroup} target="_blank" rel="noreferrer" aria-label="Facebook Group Right Now Education" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-brand-blue"><Users className="h-4 w-4" /></a>
+              <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer" aria-label="Instagram Right Now Education" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-brand-blue"><Instagram className="h-4 w-4" /></a>
+              <a href={SOCIAL_LINKS.threads} target="_blank" rel="noreferrer" aria-label="Threads Right Now Education" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xs font-bold hover:bg-brand-blue">@</a>
+            </div>
           </div>
 
           <div className="md:col-span-3">

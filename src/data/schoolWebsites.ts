@@ -19,4 +19,10 @@ export const SCHOOL_WEBSITES: Record<string, string> = {
   CMKL: 'https://www.cmkl.ac.th/',
   DTC: 'https://dtc.ac.th/en/',
   AIH: 'https://www.aihm.ac.th/',
+  BUU: 'https://www.buu.ac.th/en/',
+  NU: 'https://english.nu.ac.th/',
+  MSU: 'https://inter.msu.ac.th/',
+  MFU: 'https://en.mfu.ac.th/home.html',
+  SUT: 'https://www.sut.ac.th/en/',
+  UBU: 'https://english.ubu.ac.th/',
 };

@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
+import { CONSULTATION_URL } from '@/data/socialLinks';
 
 interface CTASectionProps {
   onNavigate: (page: Page) => void;
@@ -18,7 +19,6 @@ export default function CTASection({
   body,
   primaryLabel = 'Đăng ký tư vấn',
   secondaryLabel = 'Liên hệ với RNE',
-  primaryPage = 'contact',
   secondaryPage = 'contact',
   variant = 'blue',
 }: CTASectionProps) {
@@ -36,13 +36,15 @@ export default function CTASection({
         <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight max-w-3xl mx-auto">{heading}</h2>
         <p className="mt-5 text-white/90 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">{body}</p>
         <div className="mt-9 flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => onNavigate(primaryPage)}
+          <a
+            href={CONSULTATION_URL}
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold bg-brand-yellow text-brand-black hover:bg-yellow-300 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
           >
             {primaryLabel}
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </a>
           <button
             onClick={() => onNavigate(secondaryPage)}
             className="btn-outline-white"

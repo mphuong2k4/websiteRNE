@@ -49,6 +49,24 @@ export const SERVICES: Service[] = [
   },
 ];
 
+export const DISPLAY_SERVICES: Service[] = SERVICES.slice(0, 3).map((service) => {
+  if (service.id === 1) return {
+    ...service,
+    title: 'Tư vấn và nộp hồ sơ nhập học vào các trường Thái Lan',
+    short: 'Định hướng trường, ngành và hỗ trợ chuẩn bị, kiểm tra, nộp và theo dõi hồ sơ nhập học tại Thái Lan.',
+  };
+  if (service.id === 2) return {
+    ...service,
+    title: 'Tư vấn và hỗ trợ nộp học bổng',
+    short: 'Xây dựng chiến lược hồ sơ và hỗ trợ ứng tuyển học bổng cho bậc cử nhân, thạc sĩ và tiến sĩ.',
+  };
+  return {
+    ...service,
+    title: 'Kiến tập và thực tập tại Thái Lan',
+    short: 'Chương trình kiến tập và thực tập tại Thái Lan với thời lượng từ 1 tuần đến 3 tháng.',
+  };
+});
+
 export interface ServiceDetail {
   forWho?: string[];
   supports: string[];
@@ -178,6 +196,34 @@ export const SERVICE_DETAILS: Record<number, ServiceDetail> = {
     ],
   },
 };
+
+export const DISPLAY_SERVICE_DETAILS: Record<number, ServiceDetail> = {
+  1: {
+    forWho: ['Người cần chọn trường hoặc ngành phù hợp', 'Người muốn nộp vào trường công hoặc trường tư tại Thái Lan', 'Người cần hỗ trợ quản lý hồ sơ nhập học'],
+    supports: ['Đánh giá học lực, ngoại ngữ và kinh nghiệm', 'Phân tích mục tiêu học tập, nghề nghiệp và ngân sách', 'Xây dựng shortlist trường và ngành', 'So sánh học phí, điều kiện đầu vào và điểm mạnh chương trình', 'Chuẩn bị, kiểm tra, nộp và theo dõi hồ sơ', 'Hỗ trợ các bước trước khi nhập học'],
+    process: ['Tiếp nhận thông tin', 'Đánh giá hồ sơ và ngân sách', 'Xây dựng shortlist', 'Thống nhất phương án', 'Hoàn thiện hồ sơ', 'Nộp đơn và theo dõi', 'Chuẩn bị nhập học'],
+    disclosure: ['Hỗ trợ nộp hồ sơ miễn phí cho tất cả trường tư tại Thái Lan.', 'Chi phí hỗ trợ nộp vào các trường công lập dao động tùy theo độ khó của hồ sơ.'],
+  },
+  2: {
+    forWho: ['Ứng viên bậc cử nhân, thạc sĩ hoặc tiến sĩ', 'Người muốn tối ưu hồ sơ để tăng khả năng cạnh tranh học bổng'],
+    supports: ['Đánh giá mức độ cạnh tranh của hồ sơ', 'Tìm kiếm và phân loại học bổng phù hợp', 'Xây dựng chiến lược ứng tuyển theo từng bậc học', 'Hỗ trợ CV, bài luận, thư giới thiệu và tài liệu liên quan', 'Chuẩn bị phỏng vấn và quản lý thời hạn', 'Theo dõi kết quả và phương án tiếp theo'],
+    process: ['Đánh giá hồ sơ', 'Xác định mục tiêu học bổng', 'Tìm cơ hội phù hợp', 'Xây dựng chiến lược', 'Hoàn thiện hồ sơ', 'Nộp và phỏng vấn', 'Theo dõi kết quả'],
+    disclosure: ['RNE hỗ trợ nộp học bổng cho bậc cử nhân, thạc sĩ và tiến sĩ.', 'Điều kiện, quyền lợi và thời hạn học bổng được kiểm tra theo từng trường, từng kỳ tuyển sinh.'],
+  },
+  3: {
+    forWho: ['Sinh viên cần trải nghiệm thực tế', 'Người muốn khám phá định hướng nghề nghiệp', 'Người muốn củng cố CV hoặc portfolio'],
+    supports: ['Xác định ngành nghề và hình thức kiến tập hoặc thực tập phù hợp', 'Đánh giá kỹ năng, hoàn thiện CV và portfolio', 'Tìm kiếm hoặc kết nối cơ hội phù hợp', 'Chuẩn bị phỏng vấn và kiểm tra điều kiện chương trình', 'Hướng dẫn chuẩn bị trước khi bắt đầu'],
+    process: ['Xác định mục tiêu', 'Đánh giá kỹ năng', 'Chuẩn hóa CV và portfolio', 'Tìm kiếm và matching', 'Ứng tuyển', 'Xác nhận điều kiện', 'Bắt đầu chương trình'],
+    disclosure: ['Thời lượng chương trình từ 1 tuần đến 3 tháng.', 'RNE sẽ làm rõ nội dung công việc, yêu cầu ngoại ngữ, visa và các điều kiện cần thiết trước khi tham gia.'],
+  },
+};
+
+export const DISPLAY_FAQ_ITEMS = [
+  { q: 'RNE chỉ hỗ trợ Thái Lan hay còn quốc gia khác?', a: 'Thái Lan là thị trường chuyên sâu của RNE. Tùy điều kiện hồ sơ và chương trình, RNE có thể triển khai dịch vụ tương ứng tại Anh, Mỹ, Úc, New Zealand và Singapore.' },
+  { q: 'Kiến tập hoặc thực tập có lương không?', a: 'Tùy từng chương trình và đơn vị tiếp nhận. RNE sẽ làm rõ quyền lợi, thời lượng, yêu cầu ngoại ngữ, visa và điều kiện tham gia trước khi bạn quyết định.' },
+  { q: 'Người chưa có kinh nghiệm có thể tham gia không?', a: 'Có. RNE hỗ trợ xác định lựa chọn phù hợp với trình độ hiện tại, chuẩn hóa CV và portfolio, đồng thời chuẩn bị cho bước ứng tuyển.' },
+  { q: 'RNE có hỗ trợ visa và chuẩn bị trước khi đi không?', a: 'RNE hướng dẫn các bước chuẩn bị cần thiết trước khi khởi hành theo từng dịch vụ và điều kiện thực tế của hồ sơ.' },
+];
 
 export const FAQ_ITEMS = [
   {

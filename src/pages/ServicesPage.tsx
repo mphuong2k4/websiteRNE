@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
-import { SERVICES, SERVICE_DETAILS, FAQ_ITEMS } from '@/data/services';
+import { DISPLAY_SERVICES, DISPLAY_SERVICE_DETAILS, DISPLAY_FAQ_ITEMS } from '@/data/services';
 import ServiceIcon from '@/components/ServiceIcon';
 import CTASection from '@/components/CTASection';
 
@@ -19,7 +19,7 @@ const COLOR_MAP: Record<string, { bg: string; text: string; accent: string; dot:
 
 export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [openService, setOpenService] = useState<number | null>(SERVICES[0].id);
+  const [openService, setOpenService] = useState<number | null>(DISPLAY_SERVICES[0].id);
 
   return (
     <>
@@ -42,8 +42,8 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
 
       <section className="bg-white">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-14 md:py-20 space-y-5">
-          {SERVICES.map((s, idx) => {
-            const detail = SERVICE_DETAILS[s.id];
+          {DISPLAY_SERVICES.map((s, idx) => {
+            const detail = DISPLAY_SERVICE_DETAILS[s.id];
             const c = COLOR_MAP[s.color];
             const reversed = idx % 2 === 1;
             return (
@@ -143,7 +143,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               <h2 className="title-single-line mt-3 text-3xl font-extrabold text-brand-black">Giải đáp nhanh.</h2>
             </div>
             <div className="space-y-3">
-            {FAQ_ITEMS.map((item, i) => {
+            {DISPLAY_FAQ_ITEMS.map((item, i) => {
               const open = openFaq === i;
               return (
                 <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">

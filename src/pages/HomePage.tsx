@@ -1,12 +1,12 @@
 import { ArrowRight, Compass, Sparkles, Check, ShieldCheck, BadgeCheck, CalendarCheck } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
-import { SERVICES } from '@/data/services';
-import { SCHOOLS } from '@/data/schools';
+import { DISPLAY_SERVICES } from '@/data/services';
+import { DISPLAY_SCHOOLS } from '@/data/schools';
 import { ARTICLES } from '@/data/articles';
 import ServiceIcon from '@/components/ServiceIcon';
 import SchoolLogo from '@/components/SchoolLogo';
 import CTASection from '@/components/CTASection';
-import { SCHOOL_WEBSITES } from '@/data/schoolWebsites';
+import { CONSULTATION_URL } from '@/data/socialLinks';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
@@ -60,6 +60,12 @@ const COLOR_MAP: Record<string, { bg: string; text: string; border: string }> = 
   green: { bg: 'bg-green-50', text: 'text-brand-green', border: 'border-brand-green' },
 };
 
+const TESTIMONIAL_SLOTS = [
+  'Học viên trúng tuyển chương trình cử nhân',
+  'Học viên nhận học bổng bậc sau đại học',
+  'Học viên hoàn tất hồ sơ nhập học tại Thái Lan',
+];
+
 export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <>
@@ -78,9 +84,9 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 Từ chọn ngành, chọn trường đến học bổng và hồ sơ — RNE đồng hành bằng tư vấn cá nhân hóa, thông tin minh bạch và quyết định dựa trên mục tiêu thật của bạn.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <button onClick={() => onNavigate('contact')} className="btn-primary justify-center">
+                <a href={CONSULTATION_URL} target="_blank" rel="noreferrer" className="btn-primary justify-center">
                   Đặt lịch tư vấn <ArrowRight className="w-4 h-4" />
-                </button>
+                </a>
                 <button onClick={() => onNavigate('services')} className="btn-outline justify-center">
                   Xem lộ trình dịch vụ
                 </button>
@@ -202,7 +208,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </h2>
           </div>
           <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SERVICES.map((s) => {
+            {DISPLAY_SERVICES.map((s) => {
               const c = COLOR_MAP[s.color];
               return (
                 <article key={s.id} className={`rounded-2xl p-7 ${c.bg} border ${c.border} border-opacity-20 hover-lift`}>
@@ -238,11 +244,11 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </div>
           <div className="mt-12 overflow-hidden">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
-              {SCHOOLS.slice(0, 10).map((school) => (
-                <a key={school.name} href={SCHOOL_WEBSITES[school.abbr]} target="_blank" rel="noopener noreferrer" aria-label={`Mở website chính thức của ${school.name}`} className="flex flex-col items-center gap-3 p-4 rounded-2xl border border-gray-100 hover-lift">
+              {DISPLAY_SCHOOLS.slice(0, 10).map((school) => (
+                <div key={school.name} className="flex flex-col items-center gap-3 p-4 rounded-2xl border border-gray-100 hover-lift">
                   <SchoolLogo name={school.name} abbr={school.abbr} className="h-16 w-16" />
                   <p className="text-xs font-medium text-center text-gray-700 leading-tight line-clamp-2">{school.name}</p>
-                </a>
+                </div>
               ))}
             </div>
           </div>
@@ -311,7 +317,32 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      {/* SECTION 8 — INSIGHTS */}
+      {/* SECTION 8 - TESTIMONIALS */}
+      <section className="bg-surface-pale-yellow">
+        <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
+          <div className="max-w-2xl">
+            <p className="section-label">CÂU CHUYỆN HỌC VIÊN</p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">Những hành trình RNE đã đồng hành.</h2>
+            <p className="mt-4 text-gray-700 leading-relaxed">Hình ảnh và chia sẻ của học viên trúng tuyển sẽ được cập nhật sau khi có sự đồng ý từ từng bạn.</p>
+          </div>
+          <div className="mt-10 grid md:grid-cols-3 gap-5">
+            {TESTIMONIAL_SLOTS.map((label, index) => (
+              <article key={label} className="overflow-hidden rounded-2xl border border-brand-yellow/40 bg-white shadow-sm">
+                <div className="aspect-[4/3] bg-gradient-to-br from-brand-blue/10 via-white to-brand-yellow/25 flex items-center justify-center p-6 text-center">
+                  <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-blue shadow-sm">Hình ảnh học viên</span>
+                </div>
+                <div className="p-5">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange">Câu chuyện {index + 1}</p>
+                  <h3 className="mt-2 font-bold text-brand-black leading-snug">{label}</h3>
+                  <p className="mt-2 text-sm text-gray-600 leading-relaxed">Nội dung sẽ được cập nhật cùng hình ảnh và chia sẻ thực tế của học viên.</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 9 - INSIGHTS */}
       <section className="bg-surface-gray">
         <div className="mx-auto max-w-content px-5 sm:px-8 py-16 md:py-24">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -343,7 +374,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      {/* SECTION 9 — FINAL CTA */}
+      {/* SECTION 10 - FINAL CTA */}
       <CTASection
         onNavigate={onNavigate}
         heading="Chưa biết nên bắt đầu từ trường, học bổng hay trải nghiệm nghề nghiệp?"

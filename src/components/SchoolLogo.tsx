@@ -10,15 +10,18 @@ interface SchoolLogoProps {
 export default function SchoolLogo({ name, abbr, className = 'h-16 w-16' }: SchoolLogoProps) {
   const [failed, setFailed] = useState(false);
   const website = SCHOOL_WEBSITES[abbr];
+  const logoUrl = abbr === 'CMU'
+    ? 'https://www.cmu.ac.th/favicon.ico'
+    : website && `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(website)}&sz=128`;
 
   return (
     <div
       className={`${className} rounded-2xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm`}
       aria-label={`Logo ${name}`}
     >
-      {website && !failed ? (
+      {logoUrl && !failed ? (
         <img
-          src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(website)}&sz=128`}
+          src={logoUrl}
           alt={`Biểu trưng ${name}`}
           className="h-[72%] w-[72%] object-contain"
           loading="lazy"

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { NAV_ITEMS, type Page } from '@/lib/navigation';
 import BrandLogo from '@/components/BrandLogo';
+import { CONSULTATION_URL } from '@/data/socialLinks';
 
 interface HeaderProps {
   current: Page;
@@ -57,10 +58,10 @@ export default function Header({ current, onNavigate }: HeaderProps) {
           </nav>
 
           <div className="hidden xl:block">
-            <button onClick={() => go('contact')} className="btn-primary text-sm">
+            <a href={CONSULTATION_URL} target="_blank" rel="noreferrer" className="btn-primary text-sm">
               Đăng ký tư vấn
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </a>
           </div>
 
           <button
@@ -90,10 +91,10 @@ export default function Header({ current, onNavigate }: HeaderProps) {
                 {item.label}
               </button>
             ))}
-            <button onClick={() => go('contact')} className="btn-primary mt-3 justify-center">
+            <a href={CONSULTATION_URL} target="_blank" rel="noreferrer" className="btn-primary mt-3 justify-center">
               Đăng ký tư vấn
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </a>
           </nav>
         </div>
       )}

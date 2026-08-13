@@ -31,6 +31,26 @@ export const SCHOOLS: School[] = [
   { name: 'Asian Institute of Hospitality Management', abbr: 'AIH', type: 'Học viện chuyên ngành', city: 'Bangkok', strengths: ['Hospitality', 'Quản lý khách sạn', 'Du lịch'] },
 ];
 
+export interface DisplaySchool extends Omit<School, 'type'> {
+  type: string;
+}
+
+export const DISPLAY_SCHOOLS: DisplaySchool[] = [
+  ...SCHOOLS.map((school) => ({
+    ...school,
+    type: school.type === 'Trường công' ? 'Trường công' : 'Trường tư',
+  })),
+  { name: 'Burapha University', abbr: 'BUU', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Kinh doanh', 'Khoa học biển', 'Kỹ thuật'] },
+  { name: 'Naresuan University', abbr: 'NU', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Khoa học sức khỏe', 'Kỹ thuật', 'Khoa học xã hội'] },
+  { name: 'Mahasarakham University', abbr: 'MSU', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Giáo dục', 'Khoa học', 'Nghệ thuật'] },
+  { name: 'Mae Fah Luang University', abbr: 'MFU', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Kinh doanh', 'Khoa học sức khỏe', 'Công nghệ'] },
+  { name: 'Suranaree University of Technology', abbr: 'SUT', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Kỹ thuật', 'Công nghệ', 'Khoa học'] },
+  { name: 'Ubon Ratchathani University', abbr: 'UBU', type: 'Trường công', city: 'Ngoài Bangkok', strengths: ['Nông nghiệp', 'Khoa học', 'Giáo dục'] },
+];
+
+export const DISPLAY_SCHOOL_FILTERS = ['Tất cả', 'Trường công', 'Trường tư'] as const;
+export type DisplaySchoolFilter = (typeof DISPLAY_SCHOOL_FILTERS)[number];
+
 export const SCHOOL_FILTERS = [
   'Tất cả',
   'Trường công',
