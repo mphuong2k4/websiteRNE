@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Clock, Calendar, User } from 'lucide-react';
 import type { Page } from '@/lib/navigation';
-import { ARTICLES, CATEGORIES, type Category, type Article } from '@/data/articles';
+import { CATEGORIES, type Category, type Article } from '@/data/articles';
+import { useContent } from '@/contexts/ContentContext';
 import CTASection from '@/components/CTASection';
 
 interface InsightsPageProps {
@@ -9,11 +10,12 @@ interface InsightsPageProps {
 }
 
 export default function InsightsPage({ onNavigate }: InsightsPageProps) {
+  const { articles } = useContent();
   const [category, setCategory] = useState<Category>('Tất cả');
   const [selected, setSelected] = useState<Article | null>(null);
 
-  const filtered = ARTICLES.filter((a) => category === 'Tất cả' || a.category === category);
-  const related = selected ? ARTICLES.filter((a) => a.slug !== selected.slug).slice(0, 3) : [];
+  const filtered = articles.filter((a) => category === 'Tất cả' || a.category === category);
+  const related = selected ? articles.filter((a) => a.slug !== selected.slug).slice(0, 3) : [];
 
   useEffect(() => {
     const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');

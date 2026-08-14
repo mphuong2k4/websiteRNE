@@ -2,11 +2,10 @@ import { ArrowRight, Compass, Sparkles, Check, ShieldCheck, BadgeCheck, Calendar
 import type { Page } from '@/lib/navigation';
 import { DISPLAY_SERVICES } from '@/data/services';
 import { DISPLAY_SCHOOLS } from '@/data/schools';
-import { ARTICLES } from '@/data/articles';
+import { useContent } from '@/contexts/ContentContext';
 import ServiceIcon from '@/components/ServiceIcon';
 import SchoolLogo from '@/components/SchoolLogo';
 import CTASection from '@/components/CTASection';
-import { CONSULTATION_URL } from '@/data/socialLinks';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
@@ -24,8 +23,6 @@ const AUDIENCES = [
   'Người đi làm muốn học thạc sĩ hoặc chuyển hướng nghề nghiệp',
   'Người muốn săn học bổng để giảm chi phí du học',
   'Sinh viên muốn có trải nghiệm làm việc quốc tế',
-  'Người muốn tham gia dự án tình nguyện',
-  'Học sinh, sinh viên cần mentor đồng hành dài hạn',
 ];
 
 const PROCESS_STEPS = [
@@ -60,13 +57,8 @@ const COLOR_MAP: Record<string, { bg: string; text: string; border: string }> = 
   green: { bg: 'bg-green-50', text: 'text-brand-green', border: 'border-brand-green' },
 };
 
-const TESTIMONIAL_SLOTS = [
-  'Học viên trúng tuyển chương trình cử nhân',
-  'Học viên nhận học bổng bậc sau đại học',
-  'Học viên hoàn tất hồ sơ nhập học tại Thái Lan',
-];
-
 export default function HomePage({ onNavigate }: HomePageProps) {
+  const { articles: ARTICLES, settings } = useContent();
   return (
     <>
       {/* SECTION 1 — HERO */}
@@ -75,17 +67,17 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-6 relative z-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-white/80 px-3.5 py-2 text-xs font-semibold text-brand-blue shadow-sm backdrop-blur">
-                <BadgeCheck className="h-4 w-4" /> Tư vấn giáo dục chuyên sâu về Thái Lan
+                <BadgeCheck className="h-4 w-4" /> {settings.heroEyebrow}
               </div>
               <h1 className="mt-6 text-[2.35rem] sm:text-5xl font-extrabold text-slate-950">
-                Biến kế hoạch du học thành một <span className="inline-block whitespace-nowrap text-brand-blue">lộ trình rõ ràng.</span>
+                {settings.heroTitle} <span className="inline-block whitespace-nowrap text-brand-blue">{settings.heroHighlight}</span>
               </h1>
               <p className="mt-6 text-base md:text-lg text-slate-600 leading-relaxed max-w-xl">
-                Từ chọn ngành, chọn trường đến học bổng và hồ sơ — RNE đồng hành bằng tư vấn cá nhân hóa, thông tin minh bạch và quyết định dựa trên mục tiêu thật của bạn.
+                {settings.heroDescription}
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <a href={CONSULTATION_URL} target="_blank" rel="noreferrer" className="btn-primary justify-center">
-                  Đặt lịch tư vấn <ArrowRight className="w-4 h-4" />
+                <a href={settings.consultationUrl} target="_blank" rel="noreferrer" className="btn-primary justify-center">
+                  {settings.ctaLabel} <ArrowRight className="w-4 h-4" />
                 </a>
                 <button onClick={() => onNavigate('services')} className="btn-outline justify-center">
                   Xem lộ trình dịch vụ
@@ -100,7 +92,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             <div className="lg:col-span-6 relative">
               <div className="relative overflow-hidden rounded-[2rem] bg-slate-100 shadow-[0_30px_80px_rgba(11,31,58,0.18)] ring-1 ring-slate-900/5">
                 <img
-                  src="/rne-consultation-hero.jpg"
+                  src={settings.heroImage}
                   alt="Chuyên viên Right Now Education trao đổi lộ trình du học cùng sinh viên Việt Nam"
                   className="aspect-[4/3] w-full object-cover object-center"
                   width="1536"
@@ -323,20 +315,21 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="max-w-2xl">
             <p className="section-label">CÂU CHUYỆN HỌC VIÊN</p>
             <h2 className="mt-4 text-3xl md:text-4xl font-extrabold text-brand-black leading-tight">Những hành trình RNE đã đồng hành.</h2>
-            <p className="mt-4 text-gray-700 leading-relaxed">Hình ảnh và chia sẻ của học viên trúng tuyển sẽ được cập nhật sau khi có sự đồng ý từ từng bạn.</p>
+            <p className="mt-4 text-gray-700 leading-relaxed">Những khoảnh khắc học tập, trải nghiệm và trưởng thành của học viên RNE.</p>
           </div>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
-            {TESTIMONIAL_SLOTS.map((label, index) => (
-              <article key={label} className="overflow-hidden rounded-2xl border border-brand-yellow/40 bg-white shadow-sm">
-                <div className="aspect-[4/3] bg-gradient-to-br from-brand-blue/10 via-white to-brand-yellow/25 flex items-center justify-center p-6 text-center">
-                  <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-blue shadow-sm">Hình ảnh học viên</span>
+          <div className="mt-10 space-y-12">
+            {settings.studentGalleryGroups.map((group) => (
+              <div key={group.id}>
+                {settings.studentGalleryGroups.length > 1 && <h3 className="mb-5 text-xl font-bold text-brand-black">{group.title}</h3>}
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {group.items.map((item) => (
+                    <figure key={item.id} className="group overflow-hidden rounded-2xl border border-brand-yellow/40 bg-white shadow-sm">
+                      <div className="overflow-hidden"><img src={item.image} alt={item.alt} loading="lazy" className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105" /></div>
+                      <figcaption className="p-5 font-semibold leading-relaxed text-brand-black">{item.caption || 'Hành trình học viên RNE'}</figcaption>
+                    </figure>
+                  ))}
                 </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange">Câu chuyện {index + 1}</p>
-                  <h3 className="mt-2 font-bold text-brand-black leading-snug">{label}</h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-relaxed">Nội dung sẽ được cập nhật cùng hình ảnh và chia sẻ thực tế của học viên.</p>
-                </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>

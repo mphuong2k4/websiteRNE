@@ -8,7 +8,8 @@ export type Page =
   | 'privacy'
   | 'terms'
   | 'refund'
-  | 'disclaimer';
+  | 'disclaimer'
+  | 'admin';
 
 export const NAV_ITEMS: { label: string; page: Page }[] = [
   { label: 'Trang chủ', page: 'home' },
@@ -31,13 +32,14 @@ export const urlFor = (page: Page): string => {
     terms: '/dieu-khoan-dich-vu',
     refund: '/chinh-sach-hoan-phi',
     disclaimer: '/tuyen-bo-mien-tru-trach-nhiem',
+    admin: '/admin',
   };
   return map[page];
 };
 
 export const pageFromPath = (path: string): Page => {
   const clean = path.replace(/^\/+|\/+$/g, '');
-  const pages: Page[] = ['home', 'services', 'schools', 'insights', 'about', 'contact', 'privacy', 'terms', 'refund', 'disclaimer'];
+  const pages: Page[] = ['home', 'services', 'schools', 'insights', 'about', 'contact', 'privacy', 'terms', 'refund', 'disclaimer', 'admin'];
   for (const page of pages) {
     if (urlFor(page).replace(/^\/+|\/+$/g, '') === clean) return page;
   }

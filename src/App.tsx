@@ -11,6 +11,8 @@ import PrivacyPage from '@/pages/PrivacyPage';
 import TermsPage from '@/pages/TermsPage';
 import RefundPage from '@/pages/RefundPage';
 import DisclaimerPage from '@/pages/DisclaimerPage';
+import AdminPage from '@/pages/AdminPage';
+import VisualEditor, { ContentOverrides } from '@/components/VisualEditor';
 import { pageFromPath, urlFor, type Page } from '@/lib/navigation';
 
 function getCurrentPage(): Page {
@@ -19,6 +21,7 @@ function getCurrentPage(): Page {
 }
 
 export default function App() {
+  const visualEdit = new URLSearchParams(window.location.search).get('rne-edit') === '1';
   const [page, setPage] = useState<Page>(getCurrentPage());
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export default function App() {
       home: 'Trang chủ', services: 'Dịch vụ', schools: 'Trường tại Thái Lan', insights: 'Insights',
       about: 'Về RNE', contact: 'Liên hệ', privacy: 'Chính sách bảo mật', terms: 'Điều khoản dịch vụ',
       refund: 'Chính sách hoàn phí', disclaimer: 'Miễn trừ trách nhiệm',
+      admin: 'Quản trị',
     };
     document.title = `${labels[page]} | Right Now Education`;
   }, [page]);
@@ -60,15 +64,22 @@ export default function App() {
       case 'terms': return <TermsPage />;
       case 'refund': return <RefundPage />;
       case 'disclaimer': return <DisclaimerPage />;
+      case 'admin': return <AdminPage />;
       default: return <HomePage onNavigate={navigate} />;
     }
   };
 
+  if (page === 'admin') return <AdminPage />;
+
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <>
+    {visualEdit && <VisualEditor />}
+    <div data-cms-root className="min-h-screen bg-white flex flex-col">
       <Header current={page} onNavigate={navigate} />
       <main className="flex-1">{render()}</main>
       <Footer onNavigate={navigate} />
+      <ContentOverrides />
     </div>
+    </>
   );
 }

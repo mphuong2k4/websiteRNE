@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
+  --brand-blue-rgb: 11 94 215;
+  --brand-yellow-rgb: 246 185 24;
+  --brand-black-rgb: 11 31 58;
   --blue: #0B5ED7;
   --yellow: #F6B918;
   --orange: #FF5100;
@@ -87,6 +90,13 @@ main p {
 
 html {
   scroll-behavior: smooth;
+}
+
+[data-cms-hover='true'] {
+  cursor: pointer !important;
+  outline: 3px solid rgb(var(--brand-blue-rgb) / 0.85) !important;
+  outline-offset: 3px !important;
+  border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
