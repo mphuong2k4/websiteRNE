@@ -21,3 +21,9 @@ dist-ssr
 *.sln
 *.sw?
 .env
+.supabase-token
+.supabase-login-status
+.supabase-login-log
+
+.vercel
+.env*
