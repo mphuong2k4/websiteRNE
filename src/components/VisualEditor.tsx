@@ -125,9 +125,19 @@ export default function VisualEditor() {
       window.location.href = window.location.pathname + '#/admin';
       return;
     }
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setAuthorized(true);
-      else window.location.href = window.location.pathname + '#/admin';
+    const client = supabase;
+    void client.auth.getSession().then(async ({ data }) => {
+      if (!data.session) {
+        window.location.href = window.location.pathname + '#/admin';
+        return;
+      }
+      const permission = await client.rpc('is_admin');
+      if (!permission.error && permission.data === true) {
+        setAuthorized(true);
+        return;
+      }
+      await client.auth.signOut();
+      window.location.href = window.location.pathname + '#/admin';
     });
   }, []);
 
@@ -220,7 +230,7 @@ export default function VisualEditor() {
         </select>
         <span className='min-w-0 flex-1 truncate text-xs text-slate-300'>{notice}</span>
         <a href={window.location.pathname + '#/admin'} className='rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10'>Về Admin</a>
-        <button onClick={() => { window.location.href = window.location.pathname + '#/'; }} className='inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-900'><LogOut className='h-4 w-4' /> Thoát</button>
+        <button onClick={() => { void supabase?.auth.signOut().finally(() => { window.location.href = window.location.pathname + '#/'; }); }} className='inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-900'><LogOut className='h-4 w-4' /> Thoát</button>
       </div>
     </div>
     <div data-cms-ignore className='h-14' />
@@ -231,7 +241,7 @@ export default function VisualEditor() {
           <h2 className='flex items-center gap-2 font-bold text-brand-black'>{selection.type === 'text' ? <Type className='h-5 w-5 text-brand-blue' /> : <ImageIcon className='h-5 w-5 text-brand-blue' />}{selection.type === 'text' ? 'Chỉnh nội dung' : 'Thay hình ảnh'}</h2>
           <button onClick={() => setSelection(null)} className='rounded-lg p-2 text-slate-400 hover:bg-slate-100'><X className='h-5 w-5' /></button>
         </div>
-        {selection.type === 'text' ? <textarea autoFocus rows={7} value={draft} onChange={(event) => setDraft(event.target.value)} className='mt-4 w-full rounded-xl border border-slate-200 p-3 text-sm leading-relaxed outline-none focus:border-brand-blue' /> : <div className='mt-4'><img src={draft} alt='Ảnh đang chọn' className='max-h-64 w-full rounded-xl bg-slate-100 object-contain' /><label className='mt-3 flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-4 text-sm font-semibold text-brand-blue hover:border-brand-blue'><ImageIcon className='h-5 w-5' /> Chọn ảnh từ máy<input type='file' accept='image/*' onChange={(event) => void chooseImage(event)} className='hidden' /></label><p className='mt-2 text-xs text-slate-500'>JPEG, PNG, WebP, GIF hoặc SVG · tối đa 8 MB</p></div>}
+        {selection.type === 'text' ? <textarea autoFocus rows={7} maxLength={10000} value={draft} onChange={(event) => setDraft(event.target.value)} className='mt-4 w-full rounded-xl border border-slate-200 p-3 text-sm leading-relaxed outline-none focus:border-brand-blue' /> : <div className='mt-4'><img src={draft} alt='Ảnh đang chọn' className='max-h-64 w-full rounded-xl bg-slate-100 object-contain' /><label className='mt-3 flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-4 text-sm font-semibold text-brand-blue hover:border-brand-blue'><ImageIcon className='h-5 w-5' /> Chọn ảnh từ máy<input type='file' accept='image/jpeg,image/png,image/webp' onChange={(event) => void chooseImage(event)} className='hidden' /></label><p className='mt-2 text-xs text-slate-500'>JPEG, PNG hoặc WebP · tối đa 5 MB</p></div>}
         <div className='mt-5 flex flex-wrap justify-between gap-2'>
           <button disabled={saving} onClick={() => void persist()} className='inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600'><RotateCcw className='h-4 w-4' /> Khôi phục gốc</button>
           {selection.type === 'text' && <button disabled={saving || !draft.trim()} onClick={() => void persist({ type: 'text', value: draft })} className='inline-flex items-center gap-2 rounded-xl bg-brand-blue px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50'>{saving ? <Save className='h-4 w-4 animate-pulse' /> : <Check className='h-4 w-4' />} Lưu thay đổi</button>}

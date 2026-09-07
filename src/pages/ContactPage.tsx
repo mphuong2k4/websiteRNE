@@ -25,10 +25,10 @@ export default function ContactPage(_props: ContactPageProps) {
   const validate = (form: HTMLFormElement): Record<string, string> => {
     const fd = new FormData(form);
     const e: Record<string, string> = {};
-    if (!String(fd.get('fullName') || '').trim()) e.fullName = 'Vui lòng nhập họ và tên.';
+    if (String(fd.get('fullName') || '').trim().length < 2) e.fullName = 'Vui lòng nhập họ và tên.';
     if (!String(fd.get('email') || '').trim()) e.email = 'Vui lòng nhập email.';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(fd.get('email')))) e.email = 'Email không hợp lệ.';
-    if (!String(fd.get('phone') || '').trim()) e.phone = 'Vui lòng nhập số điện thoại.';
+    else if (String(fd.get('email')).length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(fd.get('email')))) e.email = 'Email không hợp lệ.';
+    if (String(fd.get('phone') || '').trim().length < 6) e.phone = 'Vui lòng nhập số điện thoại.';
     if (!fd.get('consent')) e.consent = 'Bạn cần đồng ý xử lý dữ liệu để gửi yêu cầu.';
     return e;
   };
@@ -41,19 +41,21 @@ export default function ContactPage(_props: ContactPageProps) {
     if (Object.keys(errs).length > 0) return;
 
     const fd = new FormData(e.currentTarget);
+    const value = (name: string, max: number) => String(fd.get(name) || '').trim().slice(0, max);
+    const birthYearValue = Number(value('birthYear', 4));
     const payload = {
-      full_name: fd.get('fullName'),
-      birth_year: fd.get('birthYear'),
-      email: fd.get('email'),
-      phone: fd.get('phone'),
-      education_level: fd.get('educationLevel'),
-      country: fd.get('country'),
-      service: fd.get('service'),
-      field: fd.get('field'),
-      budget: fd.get('budget'),
-      start_time: fd.get('startTime'),
-      content: fd.get('content'),
-      contact_channel: fd.get('channel'),
+      full_name: value('fullName', 120),
+      birth_year: Number.isInteger(birthYearValue) && birthYearValue > 0 ? birthYearValue : null,
+      email: value('email', 254).toLowerCase(),
+      phone: value('phone', 32),
+      education_level: value('educationLevel', 120) || null,
+      country: value('country', 80) || null,
+      service: value('service', 120) || null,
+      field: value('field', 200) || null,
+      budget: value('budget', 80) || null,
+      start_time: value('startTime', 80) || null,
+      content: value('content', 3000) || null,
+      contact_channel: value('channel', 80) || null,
     };
 
     setStatus('loading');
@@ -72,7 +74,20 @@ export default function ContactPage(_props: ContactPageProps) {
       return;
     }
 
-    const { error } = await supabase.from('contact_submissions').insert(payload);
+    const { error } = await supabase.rpc('submit_contact', {
+      p_full_name: payload.full_name,
+      p_email: payload.email,
+      p_phone: payload.phone,
+      p_birth_year: payload.birth_year,
+      p_education_level: payload.education_level,
+      p_country: payload.country,
+      p_service: payload.service,
+      p_field: payload.field,
+      p_budget: payload.budget,
+      p_start_time: payload.start_time,
+      p_content: payload.content,
+      p_contact_channel: payload.contact_channel,
+    });
     if (error) {
       setStatus('error');
     } else {
@@ -159,7 +174,7 @@ export default function ContactPage(_props: ContactPageProps) {
                   </div>
                   <div>
                     <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1.5">Nội dung cần hỗ trợ</label>
-                    <textarea id="content" name="content" rows={4} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition" />
+                    <textarea id="content" name="content" rows={4} maxLength={3000} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition" />
                   </div>
                   <SelectField label="Kênh liên hệ mong muốn" name="channel" options={CHANNELS} />
 
@@ -204,6 +219,9 @@ function Field({ label, name, type = 'text', error, required }: { label: string;
         id={name}
         name={name}
         type={type}
+        maxLength={type === 'email' ? 254 : type === 'tel' ? 32 : type === 'number' ? undefined : 200}
+        min={type === 'number' ? 1900 : undefined}
+        max={type === 'number' ? new Date().getFullYear() : undefined}
         aria-invalid={!!error}
         aria-describedby={error ? `${name}-error` : undefined}
         className={`w-full rounded-xl border px-4 py-3 text-sm outline-none transition ${

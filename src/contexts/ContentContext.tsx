@@ -24,6 +24,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    // refresh updates state only after the remote request resolves.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh();
     const handler = () => void refresh();
     window.addEventListener('rne-content-updated', handler);

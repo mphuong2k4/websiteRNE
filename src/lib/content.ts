@@ -116,12 +116,21 @@ export async function saveSettings(settings: SiteSettings): Promise<void> {
 }
 
 export async function uploadSiteImage(file: File): Promise<string> {
-  if (!file.type.startsWith('image/')) throw new Error('Vui lòng chọn đúng tệp hình ảnh.');
-  if (file.size > 8 * 1024 * 1024) throw new Error('Ảnh không được lớn hơn 8 MB.');
+  const extensions: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+  };
+  const extension = extensions[file.type];
+  if (!extension) throw new Error('Chỉ chấp nhận ảnh JPEG, PNG hoặc WebP.');
+  if (file.size <= 0 || file.size > 5 * 1024 * 1024) throw new Error('Ảnh phải nhỏ hơn 5 MB.');
   if (!supabase) throw new Error('Supabase Storage chưa được cấu hình.');
-  const extension = (file.name.split('.').pop() || 'jpg').replace(/[^a-z0-9]/gi, '').toLowerCase();
   const path = 'uploads/' + Date.now() + '-' + crypto.randomUUID() + '.' + extension;
-  const result = await supabase.storage.from('site-assets').upload(path, file, { cacheControl: '3600', upsert: false });
+  const result = await supabase.storage.from('site-assets').upload(path, file, {
+    cacheControl: '31536000',
+    contentType: file.type,
+    upsert: false,
+  });
   if (result.error) throw result.error;
   return supabase.storage.from('site-assets').getPublicUrl(result.data.path).data.publicUrl;
 }

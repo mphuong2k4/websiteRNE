@@ -71,8 +71,8 @@ function Login({ done }: { done: (session: Session) => void }) {
     <form onSubmit={submit} className='w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl'>
       <BrandLogo className='h-10' />
       <h1 className='mt-6 text-center text-2xl font-extrabold text-brand-black'>Đăng nhập</h1>
-      <label className={label + ' mt-7'}>Email<input required type='email' className={input} value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-      <label className={label + ' mt-4'}>Mật khẩu<input required type='password' className={input} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+      <label className={label + ' mt-7'}>Email<input required type='email' autoComplete='username' maxLength={254} className={input} value={email} onChange={(e) => setEmail(e.target.value)} /></label>
+      <label className={label + ' mt-4'}>Mật khẩu<input required type='password' autoComplete='current-password' maxLength={128} className={input} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
       {error && <p className='mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700'>{error}</p>}
       <button disabled={busy} className='mt-6 w-full rounded-xl bg-brand-blue px-4 py-3 font-semibold text-white disabled:opacity-50'>{busy ? 'Đang đăng nhập...' : 'Đăng nhập'}</button>
     </form>
@@ -114,9 +114,14 @@ export default function AdminPage() {
       setChecking(false);
     };
     void client.auth.getSession().then(({ data }) => void verify(data.session));
-    const listener = client.auth.onAuthStateChange((_event, next) => void verify(next));
+    const listener = client.auth.onAuthStateChange((_event, next) => {
+      // Run Supabase calls after the auth callback releases its internal lock.
+      window.setTimeout(() => void verify(next), 0);
+    });
     return () => listener.data.subscription.unsubscribe();
   }, []);
+  // reload updates state only after the remote request resolves.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (active) void reload(); }, [active, reload]);
 
   const edit = (article: ManagedArticle) => {
@@ -207,7 +212,7 @@ function PostEditor(props: EditorProps) {
       </section>
       <aside className='space-y-5'>
         <Box title='Xuất bản'><label className={label}>Trạng thái<select className={input} value={d.status} onChange={(e) => props.field('status', e.target.value as ManagedArticle['status'])}><option value='draft'>Bản nháp</option><option value='published'>Xuất bản</option></select></label><div className='mt-4 grid grid-cols-2 gap-3'><label className={label}>Ngày đăng<input type='date' className={input} value={d.publishedAt} onChange={(e) => props.field('publishedAt', e.target.value)} /></label><label className={label}>Thời gian đọc<input className={input} value={d.readingTime} onChange={(e) => props.field('readingTime', e.target.value)} /></label></div><label className={label + ' mt-4'}>Tác giả<input className={input} value={d.author} onChange={(e) => props.field('author', e.target.value)} /></label></Box>
-        <Box title='Ảnh đại diện'><label className={label}>URL ảnh<input className={input} value={d.image} onChange={(e) => props.field('image', e.target.value)} /></label><label className='mt-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-3 text-sm font-semibold text-brand-blue'>{uploading ? 'Đang tải ảnh...' : 'Tải ảnh từ máy'}<input type='file' accept='image/*' className='hidden' disabled={uploading} onChange={(event) => void upload(event)} /></label>{d.image && <img src={d.image} alt='' className='mt-3 aspect-video rounded-xl object-cover' />}<label className={label + ' mt-4'}>Mô tả ảnh<input className={input} value={d.imageAlt} onChange={(e) => props.field('imageAlt', e.target.value)} /></label></Box>
+        <Box title='Ảnh đại diện'><label className={label}>URL ảnh<input className={input} value={d.image} onChange={(e) => props.field('image', e.target.value)} /></label><label className='mt-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-3 text-sm font-semibold text-brand-blue'>{uploading ? 'Đang tải ảnh...' : 'Tải ảnh từ máy'}<input type='file' accept='image/jpeg,image/png,image/webp' className='hidden' disabled={uploading} onChange={(event) => void upload(event)} /></label>{d.image && <img src={d.image} alt='' className='mt-3 aspect-video rounded-xl object-cover' />}<label className={label + ' mt-4'}>Mô tả ảnh<input className={input} value={d.imageAlt} onChange={(e) => props.field('imageAlt', e.target.value)} /></label></Box>
         <Box title='SEO'><label className={label}>SEO title<input className={input} value={d.seoTitle} onChange={(e) => props.field('seoTitle', e.target.value)} /></label><label className={label + ' mt-4'}>Meta description<textarea rows={3} className={input} value={d.metaDescription} onChange={(e) => props.field('metaDescription', e.target.value)} /></label><label className={label + ' mt-4'}>Từ khóa<input className={input} value={d.keywords.join(', ')} onChange={(e) => props.field('keywords', e.target.value.split(',').map((item) => item.trim()).filter(Boolean))} /></label></Box>
       </aside>
     </div></>;
@@ -221,7 +226,6 @@ function GalleryManager({ settings, refresh, notify }: { settings: SiteSettings;
   const [groups, setGroups] = useState<StudentGalleryGroup[]>(settings.studentGalleryGroups);
   const [uploading, setUploading] = useState('');
   const [saving, setSaving] = useState(false);
-  useEffect(() => setGroups(settings.studentGalleryGroups), [settings.studentGalleryGroups]);
 
   const updateGroup = (id: string, update: Partial<StudentGalleryGroup>) => {
     setGroups((current) => current.map((group) => group.id === id ? { ...group, ...update } : group));
@@ -260,7 +264,7 @@ function GalleryManager({ settings, refresh, notify }: { settings: SiteSettings;
     <div className='mt-6 space-y-6'>{groups.map((group, groupIndex) => <section key={group.id} className='rounded-2xl border border-slate-200 bg-white p-5 md:p-6'>
       <div className='flex flex-wrap items-center gap-3'><span className='flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 font-bold text-brand-blue'>{groupIndex + 1}</span><input value={group.title} onChange={(event) => updateGroup(group.id, { title: event.target.value })} className='min-w-[220px] flex-1 rounded-xl border border-slate-200 px-3 py-2 font-semibold text-brand-black outline-none focus:border-brand-blue' />{groups.length > 1 && <button onClick={() => setGroups((current) => current.filter((item) => item.id !== group.id))} className='rounded-xl border border-red-200 p-2.5 text-red-600' aria-label='Xóa cụm'><Trash2 className='h-4 w-4' /></button>}</div>
       <div className='mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>{group.items.map((item) => <div key={item.id} className='group relative overflow-hidden rounded-xl border border-slate-200 bg-white'><div className='relative'><img src={item.image} alt={item.alt} className='aspect-[4/3] h-full w-full object-cover' /><button onClick={() => updateGroup(group.id, { items: group.items.filter((image) => image.id !== item.id) })} className='absolute right-2 top-2 rounded-lg bg-white/90 p-2 text-red-600 opacity-100 shadow-sm md:opacity-0 md:group-hover:opacity-100' aria-label='Xóa ảnh'><Trash2 className='h-4 w-4' /></button></div><textarea rows={3} value={item.caption || ''} onChange={(event) => updateGroup(group.id, { items: group.items.map((image) => image.id === item.id ? { ...image, caption: event.target.value } : image) })} placeholder='Nội dung dưới ảnh' className='w-full resize-none border-0 border-t border-slate-200 p-3 text-sm leading-relaxed outline-none focus:bg-blue-50' /></div>)}
-        <label className='flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-4 text-center text-sm font-semibold text-brand-blue hover:border-brand-blue'><ImageIcon className='mb-2 h-7 w-7' />{uploading === group.id ? 'Đang tải ảnh...' : 'Tải ảnh từ máy'}<span className='mt-1 text-xs font-normal text-slate-500'>Có thể chọn nhiều ảnh</span><input type='file' accept='image/*' multiple disabled={Boolean(uploading)} onChange={(event) => void upload(group.id, event)} className='hidden' /></label>
+        <label className='flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-blue-50 p-4 text-center text-sm font-semibold text-brand-blue hover:border-brand-blue'><ImageIcon className='mb-2 h-7 w-7' />{uploading === group.id ? 'Đang tải ảnh...' : 'Tải ảnh từ máy'}<span className='mt-1 text-xs font-normal text-slate-500'>JPEG, PNG, WebP · tối đa 5 MB/ảnh</span><input type='file' accept='image/jpeg,image/png,image/webp' multiple disabled={Boolean(uploading)} onChange={(event) => void upload(group.id, event)} className='hidden' /></label>
       </div>
     </section>)}</div>
     <div className='sticky bottom-4 mt-6 flex justify-end'><button disabled={saving || Boolean(uploading)} onClick={() => void save()} className='inline-flex items-center gap-2 rounded-xl bg-brand-blue px-5 py-3 font-semibold text-white shadow-lg disabled:opacity-50'><Save className='h-4 w-4' /> {saving ? 'Đang lưu...' : 'Lưu thư viện ảnh'}</button></div></>;
