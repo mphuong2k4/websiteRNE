@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { Check, Image as ImageIcon, LogOut, MousePointer2, RotateCcw, Save, Type, X } from 'lucide-react';
 import { useContent } from '@/contexts/ContentContext';
 import { saveSettings, uploadSiteImage, type CmsOverride } from '@/lib/content';
+import { urlFor } from '@/lib/navigation';
 import { supabase } from '@/lib/supabase';
 
 const PAGE_OPTIONS = [
@@ -25,6 +26,10 @@ interface Selection {
 
 function routeKey() {
   return window.location.hash.replace(/^#/, '') || '/';
+}
+
+function adminUrl() {
+  return window.location.pathname + '#' + urlFor('admin');
 }
 
 function elementPath(element: Element, root: Element) {
@@ -122,13 +127,13 @@ export default function VisualEditor() {
 
   useEffect(() => {
     if (!supabase) {
-      window.location.href = window.location.pathname + '#/admin';
+      window.location.href = adminUrl();
       return;
     }
     const client = supabase;
     void client.auth.getSession().then(async ({ data }) => {
       if (!data.session) {
-        window.location.href = window.location.pathname + '#/admin';
+        window.location.href = adminUrl();
         return;
       }
       const permission = await client.rpc('is_admin');
@@ -137,7 +142,7 @@ export default function VisualEditor() {
         return;
       }
       await client.auth.signOut();
-      window.location.href = window.location.pathname + '#/admin';
+      window.location.href = adminUrl();
     });
   }, []);
 
@@ -229,7 +234,7 @@ export default function VisualEditor() {
           {PAGE_OPTIONS.map(([path, name]) => <option key={path} value={path} className='text-slate-900'>{name}</option>)}
         </select>
         <span className='min-w-0 flex-1 truncate text-xs text-slate-300'>{notice}</span>
-        <a href={window.location.pathname + '#/admin'} className='rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10'>Về Admin</a>
+        <a href={adminUrl()} className='rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10'>Về Admin</a>
         <button onClick={() => { void supabase?.auth.signOut().finally(() => { window.location.href = window.location.pathname + '#/'; }); }} className='inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-900'><LogOut className='h-4 w-4' /> Thoát</button>
       </div>
     </div>

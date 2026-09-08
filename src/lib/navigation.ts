@@ -20,6 +20,8 @@ export const NAV_ITEMS: { label: string; page: Page }[] = [
   { label: 'Liên hệ', page: 'contact' },
 ];
 
+const ADMIN_PATH = '/rne-console-a7f9c2d8e4b6';
+
 export const urlFor = (page: Page): string => {
   const map: Record<Page, string> = {
     home: '/',
@@ -32,7 +34,7 @@ export const urlFor = (page: Page): string => {
     terms: '/dieu-khoan-dich-vu',
     refund: '/chinh-sach-hoan-phi',
     disclaimer: '/tuyen-bo-mien-tru-trach-nhiem',
-    admin: '/admin',
+    admin: ADMIN_PATH,
   };
   return map[page];
 };
